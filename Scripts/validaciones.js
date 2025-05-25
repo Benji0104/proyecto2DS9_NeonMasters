@@ -33,12 +33,12 @@ document.addEventListener("DOMContentLoaded", function () {
         let valido = true;
 
         if (tipo === "letras") {
-            limpio = valor.replace(/[^a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00C1\u00C9\u00CD\u00D3\u00DA\u00F1\u00D1\u00FC\u00DC\s]/g, "");
-            valido = valor === limpio;
-            campo.value = limpio;
-            mostrarError(campo, "Solo se permiten letras, espacios y diéresis (ü).", valido);
-        }        
-        
+            const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/;
+            const valido = regex.test(valor);
+            campo.value = valor;
+            mostrarError(campo, "Solo se permiten letras y espacios.", valido);
+        }
+                
         if (tipo === "numeros") {
             limpio = valor.replace(/[^0-9\-]/g, "");
             valido = valor === limpio;
