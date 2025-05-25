@@ -135,25 +135,18 @@
                             <label for="provincia" class="form-label">Provincia</label>
                             <select id="provincia" name="provincia" class="form-select" required>
                                 <option value="">Selecciona</option>
-                                <option value="Panamá">Panamá</option>
-                                <option value="Colón">Colón</option>
-                                <option value="Chiriquí">Chiriquí</option>
                             </select>
                         </div>
                         <div class="col-md-4">
                             <label for="distrito" class="form-label">Distrito</label>
                             <select id="distrito" name="distrito" class="form-select" required>
                                 <option value="">Selecciona</option>
-                                <option value="Distrito 1">Distrito 1</option>
-                                <option value="Distrito 2">Distrito 2</option>
                             </select>
                         </div>
                         <div class="col-md-4">
                             <label for="corregimiento" class="form-label">Corregimiento</label>
                             <select id="corregimiento" name="corregimiento" class="form-select" required>
                                 <option value="">Selecciona</option>
-                                <option value="Corregimiento 1">Corregimiento 1</option>
-                                <option value="Corregimiento 2">Corregimiento 2</option>
                             </select>
                         </div>
                     </div>
@@ -185,6 +178,59 @@
             <p class="mb-0">&copy; <?php echo date('Y'); ?> Neon Masters. Todos los derechos reservados.</p>
         </div>
     </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const provinciasSelect = document.getElementById("provincia");
+            const distritoSelect = document.getElementById("distrito");
+            const corregimientoSelect = document.getElementById("corregimiento");
+
+            fetch("../Assets/data/provincias.json")
+                .then(response => response.json())
+                .then(data => {
+                    data.provincia.forEach(prov => {
+                        const option = document.createElement("option");
+                        option.value = prov.nombre;
+                        option.textContent = prov.nombre;
+                        provinciasSelect.appendChild(option);
+                    });
+
+                    provinciasSelect.addEventListener("change", () => {
+                        distritoSelect.innerHTML = '<option value="">Selecciona</option>';
+                        corregimientoSelect.innerHTML = '<option value="">Selecciona</option>';
+
+                        const provincia = data.provincia.find(p => p.nombre === provinciasSelect.value);
+                        if (provincia) {
+                            provincia.distrito.forEach(dist => {
+                                const option = document.createElement("option");
+                                option.value = dist.nombre;
+                                option.textContent = dist.nombre;
+                                distritoSelect.appendChild(option);
+                            });
+                        }
+                    });
+
+                    distritoSelect.addEventListener("change", () => {
+                        corregimientoSelect.innerHTML = '<option value="">Selecciona</option>';
+                        const provincia = data.provincia.find(p => p.nombre === provinciasSelect.value);
+                        if (provincia) {
+                            const distrito = provincia.distrito.find(d => d.nombre === distritoSelect.value);
+                            if (distrito) {
+                                distrito.corregimientos.forEach(correg => {
+                                    const option = document.createElement("option");
+                                    option.value = correg;
+                                    option.textContent = correg;
+                                    corregimientoSelect.appendChild(option);
+                                });
+                            }
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error("Error al cargar provincias.json:", error);
+                });
+        });
+    </script>
 
     <script>
         // Calcular edad en tiempo real
