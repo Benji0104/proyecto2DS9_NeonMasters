@@ -24,6 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $distrito = $_POST['distrito'];
     $corregimiento = $_POST['corregimiento'];
 
+    $apellido_casada = ($sexo === 'Femenino' && $estado_civil === 'Casado' && !empty($_POST['apellido_casada']))
+    ? $_POST['apellido_casada']
+    : null;
+
     // Capturar datos académicos
     $titulo = $_POST['titulo'];
     $archivo_nombre = '';
@@ -35,23 +39,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (in_array($ext, $permitidos)) {
             $archivo_nombre = uniqid('titulo_', true) . '.' . $ext;
-            $ruta = __DIR__ . '/../uploads/' . $archivo_nombre;
-            move_uploaded_file($_FILES['archivo']['tmp_name'], $ruta);
+            $ruta = __DIR__ . '/proyecto2/Uploads/' . $archivo_nombre;
+
+            if (!move_uploaded_file($_FILES['archivo']['tmp_name'], $ruta)) {
+                die("Error al guardar el archivo.");
+            }
         } else {
-            die("Formato de archivo no permitido.");
+            die("Tipo de archivo no permitido.");
         }
+    } else {
+        die("Debe adjuntar un archivo.");
     }
 
     // Insertar en Datos_personales
     $stmt_personal = $conexion_personal->prepare("
-        INSERT INTO formulario_datospersonales
-        (cedula, nombre1, nombre2, apellido1, apellido2, fecha_nacimiento, sexo, estado_civil, telefono, email, provincia, distrito, corregimiento)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO formulario_datospersonales 
+        (cedula, nombre1, nombre2, apellido1, apellido2, fecha_nacimiento, sexo, estado_civil, telefono, email, provincia, distrito, corregimiento, apellido_casada)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ");
 
-    $stmt_personal->bind_param("sssssssssssss", 
+    $stmt_personal->bind_param("ssssssssssssss", 
         $cedula, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento,
-        $sexo, $estado_civil, $telefono, $email, $provincia, $distrito, $corregimiento
+        $sexo, $estado_civil, $telefono, $email, $provincia, $distrito, $corregimiento,
+        $apellido_casada
     );
 
     // Insertar en Academico
@@ -59,10 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         INSERT INTO formulario_datosacademico (titulo, archivo_nombre)
         VALUES (?, ?)
     ");
-
     $stmt_academico->bind_param("ss", $titulo, $archivo_nombre);
 
-    // Ejecutar ambas
+    // Ejecutar ambas operaciones
     $ok1 = $stmt_personal->execute();
     $ok2 = $stmt_academico->execute();
 

@@ -16,7 +16,7 @@ unset($_SESSION['login_error']);
         html, body {
             margin: 0;
             padding: 0;
-            height: 100%;
+            height: flex;
             background: radial-gradient(circle at top left, #0f0c29, #302b63, #24243e);
             color: #fff;
             font-family: 'Orbitron', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

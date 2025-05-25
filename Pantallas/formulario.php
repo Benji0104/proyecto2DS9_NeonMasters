@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario</title>
+    <script src="/proyecto2/Scripts/validaciones.js"></script>
     <link rel="icon" href="../Assets/imagenes/icono.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         html, body {
-            height: 130%;
+            height: flex;
             margin: 0;
             background: radial-gradient(circle at top left, #0f0c29, #302b63, #24243e);
             color: #fff;
@@ -72,7 +73,7 @@
         <div class="formulario-container w-100">
             <h2 class="text-center form-section-title">Formulario de Registro</h2>
 
-            <form action="lo_formulario.php" method="POST" enctype="multipart/form-data">
+            <form id="formulario"action="lo_formulario.php" method="POST" enctype="multipart/form-data">
                 <fieldset class="mb-4">
                     <legend class="form-section-title fs-4">Datos Personales</legend>
                     <div class="row g-3">
@@ -127,6 +128,10 @@
                                 <option value="Unido">Unido</option>
                             </select>
                         </div>
+                        <div class="col-md-6" id="apellidoCasadaContainer" style="display: none;">
+                            <label for="apellido_casada" class="form-label">Apellido de casada</label>
+                            <input type="text" class="form-control" id="apellido_casada" name="apellido_casada">
+                        </div>
                         <div class="col-md-6">
                             <label for="email" class="form-label">Correo Electrónico</label>
                             <input type="email" id="email" name="email" class="form-control" required>
@@ -154,17 +159,25 @@
 
                 <fieldset class="mb-4">
                     <legend class="form-section-title fs-4">Datos Académicos</legend>
-                    <div class="row g-3">
-                        <div class="col-md-8">
-                            <label for="titulo" class="form-label">Nombre del Título</label>
-                            <input type="text" id="titulo" name="titulo" class="form-control" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="archivo" class="form-label">Seleccionar Archivo</label>
-                            <input type="file" id="archivo" name="archivo" class="form-control" accept=".pdf,.jpg,.png" required>
+
+                    <div id="bloque-academico">
+                        <div class="row g-3 bloque-titulo align-items-end">
+                            <div class="col-md-8">
+                                <label for="titulo_1" class="form-label">Nombre del Título</label>
+                                <input type="text" id="titulo_1" name="titulo[]" class="form-control titulo-input" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="archivo_1" class="form-label">Seleccionar Archivo</label>
+                                <input type="file" id="archivo_1" name="archivo[]" class="form-control archivo-input" accept=".pdf,.jpg,.png" required>
+                            </div>
                         </div>
                     </div>
+
+                    <div class="text-end mt-2">
+                        <button type="button" class="btn btn-sm btn-light" id="agregarTitulo">+</button>
+                    </div>
                 </fieldset>
+
 
                 <div class="text-center">
                     <button type="submit" class="btn btn-neon px-5">Enviar</button>
@@ -180,6 +193,28 @@
     </footer>
 
     <script>
+        //Campo dinámico si la mujer es casada
+        document.addEventListener("DOMContentLoaded", function () {
+            const sexo = document.getElementById("sexo");
+            const estado = document.getElementById("estado");
+            const apellidoCasadaContainer = document.getElementById("apellidoCasadaContainer");
+
+            function actualizarCampoCasada() {
+                if (sexo.value === "Femenino" && estado.value === "Casado") {
+                    apellidoCasadaContainer.style.display = "block";
+                } else {
+                    apellidoCasadaContainer.style.display = "none";
+                    document.getElementById("apellido_casada").value = '';
+                }
+            }
+
+            sexo.addEventListener("change", actualizarCampoCasada);
+            estado.addEventListener("change", actualizarCampoCasada);
+        });
+    </script>
+
+    <script>
+        //Para jalar los datos de provincias.json
         document.addEventListener("DOMContentLoaded", function () {
             const provinciasSelect = document.getElementById("provincia");
             const distritoSelect = document.getElementById("distrito");
@@ -245,5 +280,33 @@
             document.getElementById('edad').value = edad;
         });
     </script>
+
+    <script>
+        //Añadir bloque en datos academicos
+        document.addEventListener("DOMContentLoaded", function () {
+            let contador = 1;
+
+            document.getElementById("agregarTitulo").addEventListener("click", function () {
+                contador++;
+
+                const bloque = document.createElement("div");
+                bloque.classList.add("row", "g-3", "bloque-titulo", "align-items-end", "mt-3");
+
+                bloque.innerHTML = `
+                    <div class="col-md-8">
+                        <label for="titulo_${contador}" class="form-label">Nombre del Título</label>
+                        <input type="text" id="titulo_${contador}" name="titulo[]" class="form-control titulo-input" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="archivo_${contador}" class="form-label">Seleccionar Archivo</label>
+                        <input type="file" id="archivo_${contador}" name="archivo[]" class="form-control archivo-input" accept=".pdf,.jpg,.png" required>
+                    </div>
+                `;
+
+                document.getElementById("bloque-academico").appendChild(bloque);
+            });
+        });
+    </script>
+
 </body>
 </html>
