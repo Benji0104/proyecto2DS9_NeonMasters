@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return valido;
     }
 
-    // Validación en tiempo real
+    // Validación en tiempo real de los campos
     soloLetrasIds.forEach(id => {
         const campo = document.getElementById(id);
         if (campo) {
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
         formulario.addEventListener("submit", function (e) {
             let esValido = true;
             let primerCampoInvalido = null;
-
+    
             soloLetrasIds.forEach(id => {
                 const campo = document.getElementById(id);
                 if (campo && !validarCampo(campo, "letras")) {
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (!primerCampoInvalido) primerCampoInvalido = campo;
                 }
             });
-
+    
             soloNumerosIds.forEach(id => {
                 const campo = document.getElementById(id);
                 if (campo && !validarCampo(campo, "numeros")) {
@@ -85,12 +85,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (!primerCampoInvalido) primerCampoInvalido = campo;
                 }
             });
-
+    
             if (!esValido) {
                 e.preventDefault();
                 primerCampoInvalido.focus();
             }
         });
-    }
+    }    
 });
 
