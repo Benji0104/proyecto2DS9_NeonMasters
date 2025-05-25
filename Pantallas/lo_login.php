@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (password_verify($passwordInput, $passwordHash)) {
             $_SESSION['user'] = $username;
-            header("Location: formulario.php");
+            header("Location: visual_datos.php");
             exit;
         } else {
             $_SESSION['login_error'] = "Contraseña incorrecta.";
