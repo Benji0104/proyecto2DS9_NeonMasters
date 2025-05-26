@@ -82,37 +82,43 @@ if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
         </div>
     </nav>
 
-    <main class="flex-fill d-flex justify-content-center align-items-start">
+    <main class="flex-fill d-flex justify-content-center align-items-start px-3">
         <div class="formulario-container w-100">
             <h2 class="text-center form-section-title">Solicitud de empleo</h2>
 
-            <form id="formulario"action="lo_formulario.php" method="POST" enctype="multipart/form-data">
+            <form id="formulario" action="lo_formulario.php" method="POST" enctype="multipart/form-data">
                 <fieldset class="mb-4">
                     <legend class="form-section-title fs-4">Datos Personales</legend>
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="cedula" class="form-label">Cédula</label>
-                            <input type="text" id="cedula" name="cedula" class="form-control" maxlength="20" onkeypress="validarPEN(event, this)" oninput="validarPENPegado(this)" required>
+                            <input type="text" id="cedula" name="cedula" class="form-control" maxlength="11"
+                                onkeypress="validarPEN(event, this)" oninput="validarPENPegado(this)" required>
                         </div>
                         <div class="col-md-6">
                             <label for="telefono" class="form-label">Teléfono</label>
-                            <input type="tel" id="telefono" name="telefono" class="form-control" maxlength="9" onkeypress="soloNumerosYGuion(event)" required>
+                            <input type="tel" id="telefono" name="telefono" class="form-control" maxlength="9"
+                                onkeypress="soloNumerosYGuion(event)" required>
                         </div>
                         <div class="col-md-6">
                             <label for="nombre1" class="form-label">Primer Nombre</label>
-                            <input type="text" id="nombre1" name="nombre1" class="form-control" onkeypress="soloLetrasConAcentos(event)" onblur="primeraLetraMayuscula(this)" required>
+                            <input type="text" id="nombre1" name="nombre1" class="form-control"
+                                onkeypress="soloLetrasConAcentos(event)" onblur="primeraLetraMayuscula(this)" required>
                         </div>
                         <div class="col-md-6">
                             <label for="nombre2" class="form-label">Segundo Nombre</label>
-                            <input type="text" id="nombre2" name="nombre2" class="form-control" onkeypress="soloLetrasConAcentos(event)" onblur="primeraLetraMayuscula(this)">
+                            <input type="text" id="nombre2" name="nombre2" class="form-control"
+                                onkeypress="soloLetrasConAcentos(event)" onblur="primeraLetraMayuscula(this)">
                         </div>
                         <div class="col-md-6">
                             <label for="apellido1" class="form-label">Primer Apellido</label>
-                            <input type="text" id="apellido1" name="apellido1" class="form-control" onkeypress="soloLetrasConAcentos(event)" onblur="primeraLetraMayuscula(this)" required>
+                            <input type="text" id="apellido1" name="apellido1" class="form-control"
+                                onkeypress="soloLetrasConAcentos(event)" onblur="primeraLetraMayuscula(this)" required>
                         </div>
                         <div class="col-md-6">
                             <label for="apellido2" class="form-label">Segundo Apellido</label>
-                            <input type="text" id="apellido2" name="apellido2" class="form-control" onkeypress="soloLetrasConAcentos(event)" onblur="primeraLetraMayuscula(this)">
+                            <input type="text" id="apellido2" name="apellido2" class="form-control"
+                                onkeypress="soloLetrasConAcentos(event)" onblur="primeraLetraMayuscula(this)">
                         </div>
                         <div class="col-md-4">
                             <label for="nacimiento" class="form-label">Fecha de Nacimiento</label>
@@ -143,11 +149,13 @@ if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
                         </div>
                         <div class="col-md-6" id="apellidoCasadaContainer" style="display: none;">
                             <label for="apellido_casada" class="form-label">Apellido de casada</label>
-                            <input type="text" class="form-control" id="apellido_casada" name="apellido_casada" onkeypress="soloLetrasConAcentos(event)">
+                            <input type="text" class="form-control" id="apellido_casada" name="apellido_casada"
+                                onkeypress="soloLetrasConAcentos(event)">
                         </div>
                         <div class="col-md-6">
                             <label for="email" class="form-label">Correo Electrónico</label>
-                            <input type="email" id="email" name="email" class="form-control" onblur="validarEmail(this)" required>
+                            <input type="email" id="email" name="email" class="form-control"
+                                onblur="validarEmail(this)" required>
                         </div>
                         <div class="col-md-4">
                             <label for="provincia" class="form-label">Provincia</label>
@@ -179,35 +187,52 @@ if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
                                 <label for="titulo_1" class="form-label">Nombre del Título</label>
                                 <input type="text" id="titulo_1" name="titulo[]" class="form-control titulo-input" required>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label for="archivo_1" class="form-label">Seleccionar Archivo</label>
-                                <input type="file" id="archivo_1" name="archivo[]" class="form-control archivo-input" accept=".pdf,.jpg,.png" required>
+                                <input type="file" id="archivo_1" name="archivo[]" class="form-control archivo-input"
+                                    accept=".pdf,.jpg,.png" required>
+                            </div>
+                            <div class="col-md-1 text-end">
+                                <!-- Sin botón eliminar en el primer bloque -->
                             </div>
                         </div>
                     </div>
 
-                    <div class="text-end mt-2">
-                        <button type="button" class="btn btn-sm btn-light" id="agregarTitulo">+</button>
+                    <div class="row">
+                        <div class="col text-end mt-3">
+                            <button type="button" class="btn btn-sm btn-neon" id="quitarTitulo">−</button>
+                            <button type="button" class="btn btn-sm btn-neon" id="agregarTitulo">+</button>
+                        </div>
                     </div>
                 </fieldset>
-
 
                 <div class="text-center">
                     <button type="submit" class="btn btn-neon px-5">Enviar</button>
                 </div>
-                    <script>form.onsubmit = function () {
-                         return validarPEFinal(document.getElementById("cedula"));
-                            };
-                     </script>
             </form>
         </div>
     </main>
+
 
     <footer class="mt-auto">
         <div class="container">
             <p class="mb-0">&copy; <?php echo date('Y'); ?> Neon Masters. Todos los derechos reservados.</p>
         </div>
     </footer>
+
+
+    <!----Scripts exclusivos para este fichero---->
+
+
+    <script>
+        //Validar el formulario
+        document.addEventListener("DOMContentLoaded", function () {
+            const formulario = document.getElementById("formulario");
+            formulario.onsubmit = function () {
+                return validarPEFinal(document.getElementById("cedula"));
+            };
+        });
+    </script>
 
     <script>
         //Campo dinámico si la mujer es casada
@@ -299,11 +324,18 @@ if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
     </script>
 
     <script>
-        //Añadir bloque en datos academicos
+        //Bloques dinamicos para agregar y quitar los datos academicos
         document.addEventListener("DOMContentLoaded", function () {
             let contador = 1;
 
-            document.getElementById("agregarTitulo").addEventListener("click", function () {
+            const bloqueAcademico = document.getElementById("bloque-academico");
+            const agregarBtn = document.getElementById("agregarTitulo");
+            const quitarBtn = document.getElementById("quitarTitulo");
+
+            // Inicializar botón quitar
+            actualizarBotonQuitar();
+
+            agregarBtn.addEventListener("click", function () {
                 contador++;
 
                 const bloque = document.createElement("div");
@@ -314,23 +346,79 @@ if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
                         <label for="titulo_${contador}" class="form-label">Nombre del Título</label>
                         <input type="text" id="titulo_${contador}" name="titulo[]" class="form-control titulo-input" required>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label for="archivo_${contador}" class="form-label">Seleccionar Archivo</label>
                         <input type="file" id="archivo_${contador}" name="archivo[]" class="form-control archivo-input" accept=".pdf,.jpg,.png" required>
                     </div>
+                    <div class="col-md-1 text-end">
+                        <button type="button" class="btn btn-danger btn-sm eliminar-bloque" title="Eliminar bloque">🗑</button>
+                    </div>
                 `;
 
-              
-                document.getElementById("bloque-academico").appendChild(bloque);
+                bloqueAcademico.appendChild(bloque);
+                actualizarBotonQuitar();
             });
 
-            // Delegación para validar en cualquier input .titulo-input nuevo o existente
-            document.getElementById("bloque-academico").addEventListener("keypress", function(event) {
-                if (event.target.classList.contains("titulo-input")) {
-                    soloLetrasConAcentos(event);
+            quitarBtn.addEventListener("click", function () {
+                const bloques = bloqueAcademico.getElementsByClassName("bloque-titulo");
+                if (bloques.length > 1) {
+                    bloqueAcademico.removeChild(bloques[bloques.length - 1]);
+                    contador--;
+                    actualizarBotonQuitar();
+                } else {
+                    alert("Debe haber al menos un título.");
                 }
             });
+
+            // Eliminar bloque individual con botón interno 🗑
+            bloqueAcademico.addEventListener("click", function (event) {
+                if (event.target.classList.contains("eliminar-bloque")) {
+                    const bloques = bloqueAcademico.getElementsByClassName("bloque-titulo");
+                    if (bloques.length > 1) {
+                        const bloque = event.target.closest(".bloque-titulo");
+                        bloque.remove();
+                        contador--;
+                        actualizarBotonQuitar();
+                    } else {
+                        alert("Debe haber al menos un título.");
+                    }
+                }
+            });
+
+            // Validación de letras con acentos en inputs
+            bloqueAcademico.addEventListener("keypress", function(event) {
+                if (event.target.classList.contains("titulo-input")) {
+                    soloLetrasConAcentos(event); // asegúrate de tener esta función definida
+                }
+            });
+
+            // Desactiva el botón quitar si solo queda un bloque
+            function actualizarBotonQuitar() {
+                const bloques = bloqueAcademico.getElementsByClassName("bloque-titulo");
+                quitarBtn.disabled = bloques.length <= 1;
+            }
         });
+    </script>
+
+    <script>
+        //Evitar la introduccion de numeros por las teclas o pegarlo
+        function bloquearEntradaNacimiento() {
+            const nacimientoInput = document.getElementById("nacimiento");
+            if (!nacimientoInput) return;
+
+            nacimientoInput.addEventListener("keydown", function (e) {
+                e.preventDefault();
+            });
+
+            nacimientoInput.addEventListener("paste", function (e) {
+                e.preventDefault();
+                    });
+                }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                bloquearEntradaNacimiento();
+            });
+        ;
     </script>
 </body>
 </html>
