@@ -84,7 +84,7 @@ if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
 
     <main class="flex-fill d-flex justify-content-center align-items-start">
         <div class="formulario-container w-100">
-            <h2 class="text-center form-section-title">Formulario de Registro</h2>
+            <h2 class="text-center form-section-title">Solicitud de empleo</h2>
 
             <form id="formulario"action="lo_formulario.php" method="POST" enctype="multipart/form-data">
                 <fieldset class="mb-4">
