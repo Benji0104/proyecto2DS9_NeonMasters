@@ -92,11 +92,11 @@ if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="cedula" class="form-label">Cédula</label>
-                            <input type="text" id="cedula" name="cedula" class="form-control" required>
+                            <input type="text" id="cedula" name="cedula" class="form-control" maxlength="20" required>
                         </div>
                         <div class="col-md-6">
                             <label for="telefono" class="form-label">Teléfono</label>
-                            <input type="tel" id="telefono" name="telefono" class="form-control" required>
+                            <input type="tel" id="telefono" name="telefono" class="form-control" maxlength="9" required>
                         </div>
                         <div class="col-md-6">
                             <label for="nombre1" class="form-label">Primer Nombre</label>
