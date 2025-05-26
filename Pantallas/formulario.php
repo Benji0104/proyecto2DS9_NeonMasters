@@ -1,6 +1,6 @@
 <?php
 if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
-    echo "<script>alert('Datos enviados'); window.location.href = 'formulario.php';</script>";
+    echo "<script>alert('Datos enviados correctamente');</script>";
 }
 ?>
 

@@ -3,115 +3,149 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Conexiones independientes
-$conexion_personal = new mysqli('localhost', 'root', '', 'Datos_personales');
-$conexion_academico = new mysqli('localhost', 'root', '', 'Academico');
+    // 1) Conexión a las bases de datos
+    $conexion_personal = new mysqli('localhost', 'root', '', 'Datos_personales');
+    $conexion_academico = new mysqli('localhost', 'root', '', 'Academico');
+    if ($conexion_personal->connect_error || $conexion_academico->connect_error) {
+        die("Error de conexión: " .
+            $conexion_personal->connect_error . " / " .
+            $conexion_academico->connect_error);
+    }
 
-// Verificar conexiones
-if ($conexion_personal->connect_error || $conexion_academico->connect_error) {
-    die("Error de conexión a las bases de datos.");
-}
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header("Location: formulario.php");
+        exit;
+    }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Capturar los datos personales
-    $cedula = $_POST['cedula'];
-    $nombre1 = $_POST['nombre1'];
-    $nombre2 = $_POST['nombre2'];
-    $apellido1 = $_POST['apellido1'];
-    $apellido2 = $_POST['apellido2'];
-    $fecha_nacimiento = $_POST['nacimiento'];  // formato YYYY-MM-DD
-    $sexo = $_POST['sexo'];
-    $estado_civil = $_POST['estado'];
-    $telefono = $_POST['telefono'];
-    $email = $_POST['email'];
-    $provincia = $_POST['provincia'];
-    $distrito = $_POST['distrito'];
+    // 2) Captura y validación de datos personales
+    $cedula           = $_POST['cedula'];
+    $nombre1          = $_POST['nombre1'];
+    $nombre2          = $_POST['nombre2'] ?: null;
+    $apellido1        = $_POST['apellido1'];
+    $apellido2        = $_POST['apellido2'] ?: null;
+    $apellido_casada  = null;
+
+    $fecha_nacimiento = $_POST['nacimiento'];      // YYYY-MM-DD
+
+    $sexo = trim($_POST['sexo'] ?? '');
+    if ($sexo !== 'Masculino' && $sexo !== 'Femenino') {
+        die("Error: Debes seleccionar un sexo válido.");
+    }
+
+    $estado_civil = $_POST['estado'] ?? '';
+    $validos_estado = ['Soltero','Casado','Viudo','Divorciado','Unido'];
+    if (!in_array($estado_civil, $validos_estado, true)) {
+        die("Error: Estado civil inválido.");
+    }
+
+    if ($sexo === 'Femenino' && !empty($_POST['apellido_casada'])) {
+        $apellido_casada = $_POST['apellido_casada'];
+    }
+
+    $telefono      = $_POST['telefono'];
+    $email         = $_POST['email'];
+    $provincia     = $_POST['provincia'];
+    $distrito      = $_POST['distrito'];
     $corregimiento = $_POST['corregimiento'];
 
-    $apellido_casada = ($sexo === 'Femenino' && $estado_civil === 'Casado' && !empty($_POST['apellido_casada']))
-        ? $_POST['apellido_casada']
-        : null;
+    // 3) Inserción de datos personales
+    $sql = "INSERT INTO formulario_datospersonales (
+        cedula, nombre1, nombre2, apellido1, apellido2, apellido_casada,
+        fecha_nacimiento, sexo, estado_civil, telefono, email, provincia, distrito, corregimiento
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    // Calcular la edad en años basado en la fecha de nacimiento
-    $fecha_nac_dt = new DateTime($fecha_nacimiento);
-    $hoy = new DateTime();
-    $edad = $hoy->diff($fecha_nac_dt)->y; // diferencia en años
+    $stmt_personal = $conexion_personal->prepare($sql);
+    if (!$stmt_personal) {
+        die("Error al preparar datos personales: " . $conexion_personal->error);
+    }
 
-    // Insertar en Datos_personales (añadido campo edad)
-    $stmt_personal = $conexion_personal->prepare("
-        INSERT INTO formulario_datospersonales 
-        (cedula, nombre1, nombre2, apellido1, apellido2, fecha_nacimiento, edad, sexo, estado_civil, telefono, email, provincia, distrito, corregimiento, apellido_casada)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ");
+    var_dump($fecha_nacimiento);
 
-    $stmt_personal->bind_param("sssssisisssssss", 
-        $cedula, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $edad,
-        $sexo, $estado_civil, $telefono, $email, $provincia, $distrito, $corregimiento,
-        $apellido_casada
+    $stmt_personal->bind_param(
+        "ssssssssssssss",
+        $cedula,
+        $nombre1,
+        $nombre2,
+        $apellido1,
+        $apellido2,
+        $apellido_casada,
+        $fecha_nacimiento,
+        $sexo,
+        $estado_civil,
+        $telefono,
+        $email,
+        $provincia,
+        $distrito,
+        $corregimiento
     );
 
-    $ok1 = $stmt_personal->execute();
-
-    // Procesar datos académicos con múltiples títulos y archivos
-    $titulos = $_POST['titulo'];  // Array de títulos
-    $archivos = $_FILES['archivo']; // Array de archivos
-
-    // Preparar statement para insertar datos académicos
-    $stmt_academico = $conexion_academico->prepare("
-        INSERT INTO formulario_datosacademico (titulo, archivo, fecha_registro) VALUES (?, ?, NOW())
-    ");
-
-    // Verificar que preparación fue correcta
-    if (!$stmt_academico) {
-        die("Error en la preparación de consulta académica: " . $conexion_academico->error);
+    if (!$stmt_personal->execute()) {
+        die("Error al guardar datos personales: " . $stmt_personal->error);
     }
 
-    // Recorrer todos los títulos y archivos
-    $ok2 = true;
-    for ($i = 0; $i < count($titulos); $i++) {
-        $titulo_actual = $titulos[$i];
+    // Obtener el ID del último insertado
+    $lastId = $conexion_personal->insert_id;
 
-        // Validar archivo en la posición $i
-        if (isset($archivos['error'][$i]) && $archivos['error'][$i] === 0) {
-            // Validar extensión permitida
-            $permitidos = ['pdf', 'jpg', 'jpeg', 'png'];
-            $ext = strtolower(pathinfo($archivos['name'][$i], PATHINFO_EXTENSION));
-
-            if (!in_array($ext, $permitidos)) {
-                die("Tipo de archivo no permitido en archivo #" . ($i+1));
-            }
-
-            // Obtener contenido binario del archivo
-            $contenido_binario = file_get_contents($archivos['tmp_name'][$i]);
-
-            // Bind y execute para cada registro académico
-            $stmt_academico->bind_param("sb", $titulo_actual, $null); // "sb" = string y blob
-            $stmt_academico->send_long_data(1, $contenido_binario); // índice 1 = segundo parámetro (archivo)
-            $ok2 = $ok2 && $stmt_academico->execute();
-
-            if (!$ok2) {
-                die("Error al guardar archivo académico #" . ($i+1));
-            }
-        } else {
-            die("Debe adjuntar todos los archivos correctamente.");
-        }
-    }
-
-    if ($ok1 && $ok2) {
-        header("Location: formulario.php?enviado=1");
-        exit;
-    } else {
-        echo "<h2 style='color: red;'>Error al guardar en la base de datos.</h2>";
+    // Calcular edad solo para ese registro
+    $sql_update_edad = "UPDATE formulario_datospersonales SET edad = TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) WHERE id = ?";
+    $stmt_edad = $conexion_personal->prepare($sql_update_edad);
+    if ($stmt_edad) {
+        $stmt_edad->bind_param("i", $lastId);
+        $stmt_edad->execute();
+        $stmt_edad->close();
     }
 
     $stmt_personal->close();
+
+    // 4) Procesar y guardar datos académicos (múltiples)
+    $titulos  = $_POST['titulo'];
+    $archivos = $_FILES['archivo'];
+
+    $sqlA = "
+        INSERT INTO formulario_datosacademico
+        (titulo, archivo)
+        VALUES (?, ?)
+    ";
+
+    $stmt_academico = $conexion_academico->prepare($sqlA);
+    if (!$stmt_academico) {
+        die("Error al preparar datos académicos: " . $conexion_academico->error);
+    }
+
+    $ok2 = true;
+    for ($i = 0; $i < count($titulos); $i++) {
+        $titulo = $titulos[$i];
+
+        if (!isset($archivos['error'][$i]) || $archivos['error'][$i] !== UPLOAD_ERR_OK) {
+            $ok2 = false;
+            break;
+        }
+
+        $bin = file_get_contents($archivos['tmp_name'][$i]);
+
+        // 's' para titulo, 'b' para blob
+        $null = NULL;
+        $stmt_academico->bind_param("sb", $titulo, $null);
+        $stmt_academico->send_long_data(1, $bin);
+
+        if (!$stmt_academico->execute()) {
+            $ok2 = false;
+            break;
+        }
+    }
     $stmt_academico->close();
+
+    // 5) Cerrar conexiones y redirigir
     $conexion_personal->close();
     $conexion_academico->close();
 
-} else {
-    header("Location: formulario.php");
+    if ($ok2) {
+        header("Location: formulario.php?enviado=1");
+    } else {
+        header("Location: formulario.php?error=1");
+    }
     exit;
-}
+    ?>
+
 
 
