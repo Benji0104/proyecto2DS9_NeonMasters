@@ -332,6 +332,5 @@ if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
             });
         });
     </script>
-
 </body>
 </html>
