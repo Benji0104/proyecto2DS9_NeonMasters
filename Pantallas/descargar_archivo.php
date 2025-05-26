@@ -21,16 +21,13 @@ $id = (int) $_GET['id'];
         }
 
         $filename = $row['titulo'] ?: 'archivo';
-        $filename = preg_replace('/[^A-Za-z0-9_\-]/', '_', $filename) . '.pdf'; // Cambia extensión si sabes otra
+        // Ajusta la extensión si sabes el tipo de archivo guardado; por ejemplo, .pdf o .docx
+        $filename = preg_replace('/[^A-Za-z0-9_\-]/', '_', $filename) . '.pdf';
 
         header('Content-Description: File Transfer');
         header('Content-Type: application/octet-stream');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
         header('Content-Length: ' . strlen($row['archivo']));
-        header('Cache-Control: must-revalidate');
-        header('Pragma: public');
-        header('Expires: 0');
-
         echo $row['archivo'];
         exit;
 
