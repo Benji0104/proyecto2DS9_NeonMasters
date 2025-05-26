@@ -1,158 +1,181 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const soloLetrasIds = [
-        "nombre1", "nombre2", "apellido1", "apellido2", "apellido_casada"
-    ];
-    const soloNumerosIds = [
-        "telefono"
-    ];
-    const campoCedulaId = "cedula";
-    const camposObligatorios = ["cedula", "telefono", "nombre1", "apellido1"];
-    const formulario = document.getElementById("formulario");
+function soloLetrasConAcentos(event) {
+    const tecla = event.key;
+    const regex = /^[a-zA-ZáéíóúàèìòùâêîôûãñõüïçÁÉÍÓÚÀÈÌÒÙÂÊÎÔÛÃÑÕÜÏÇ\s]$/;
+    if (!regex.test(tecla)) {
+        alert("Solo se permiten letras y caracteres con acentos especiales.");
+        event.preventDefault();
+    }
+}
 
-    function mostrarError(campo, valido) {
-        let errorSpan = campo.parentNode.querySelector(".error-feedback");
-        if (!errorSpan) {
-            errorSpan = document.createElement("div");
-            errorSpan.classList.add("error-feedback");
-            campo.parentNode.appendChild(errorSpan);
+function soloNumerosYGuion(event) {
+    const tecla = event.key;
+    const regex = /^[0-9-]$/;
+    if (!regex.test(tecla)) {
+        alert("Solo se permiten números y el guion (-).");
+        event.preventDefault();
+    }
+}
+
+function validarPEN(event, inputElement) {
+    const tecla = event.key.toUpperCase();
+    const allowedNumbers = /^[0-9]$/;
+
+    // Convertir y mantener en mayúsculas
+    inputElement.value = inputElement.value.toUpperCase();
+    const valor = inputElement.value;
+
+    const countP = (valor.match(/P/g) || []).length;
+    const countE = (valor.match(/E/g) || []).length;
+    const countN = (valor.match(/N/g) || []).length;
+    const countGuion = (valor.match(/-/g) || []).length;
+
+    if (allowedNumbers.test(tecla)) return;
+
+    if (tecla === '-') {
+        if (countGuion >= 2) {
+            alert("Solo se permiten hasta dos guiones (-).");
+            event.preventDefault();
         }
+        return;
+    }
 
-        if (valido) {
-            campo.classList.remove("is-invalid");
-            errorSpan.textContent = "";
-        } else {
-            campo.classList.add("is-invalid");
-            errorSpan.textContent = "Entrada inválida.";
-            errorSpan.style.color = "red";
-            errorSpan.style.fontSize = "0.85rem";
-            errorSpan.style.marginTop = "5px";
+    if (!['P', 'E', 'N'].includes(tecla)) {
+        alert("Solo se permiten números, las letras P, E, N y guiones (-).");
+        event.preventDefault();
+        return;
+    }
+
+    const posibleValor = valor + tecla;
+    if (/EN|EP|NP|NE|PN/.test(posibleValor)) {
+        alert("No se permiten combinaciones EN, EP, NP, NE ni PN.");
+        event.preventDefault();
+        return;
+    }
+
+    if (tecla === 'P' && countP >= 1) {
+        alert("La letra 'P' solo puede usarse una vez.");
+        event.preventDefault();
+    }
+
+    if (tecla === 'N' && countN >= 1) {
+        alert("La letra 'N' solo puede usarse una vez.");
+        event.preventDefault();
+    }
+
+    if (tecla === 'E') {
+        if (countE >= 2) {
+            alert("La letra 'E' solo puede usarse hasta dos veces.");
+            event.preventDefault();
+        } else if (valor.startsWith('E') && countE >= 1) {
+            alert("Si hay una 'E' al inicio, no se permite otra 'E' después.");
+            event.preventDefault();
+        }
+    }
+}
+
+function validarPENFinal(inputElement) {
+    const valor = inputElement.value.toUpperCase();
+    const posP = valor.indexOf('P');
+    const countE = (valor.match(/E/g) || []).length;
+    const countGuion = (valor.match(/-/g) || []).length;
+
+    if (posP === -1) {
+        alert("Debe incluir una letra 'P'.");
+        return false;
+    }
+
+    const eDespuesDeP = valor.slice(posP + 1).includes('E');
+    if (!eDespuesDeP) {
+        alert("La letra 'P' debe tener al menos una 'E' después.");
+        return false;
+    }
+
+    if (countE > 2) {
+        alert("No se permiten más de dos letras 'E'.");
+        return false;
+    }
+
+    if (countGuion > 3) {
+        alert("No se permiten más de tres guiones (-).");
+        return false;
+    }
+
+    return true;
+}
+
+function validarPENPegado(inputElement) {
+    const valor = inputElement.value.toUpperCase();
+
+    // Validar solo caracteres permitidos: números, P, E, N, y hasta 3 guiones
+    if (!/^[0-9PEN-]*$/.test(valor)) {
+        alert("Solo se permiten números, letras P, E, N y guiones (-).");
+        return false;
+    }
+
+    // Validar cantidad de guiones
+    const countGuion = (valor.match(/-/g) || []).length;
+    if (countGuion > 2) {
+        alert("No se permiten más de dos guiones (-).");
+        return false;
+    }
+
+    // Validar que no existan combinaciones prohibidas
+    if (/EN|EP|NP|NE|PN/.test(valor)) {
+        alert("No se permiten combinaciones EN, EP, NP, NE ni PN.");
+        return false;
+    }
+
+    const countP = (valor.match(/P/g) || []).length;
+    const countE = (valor.match(/E/g) || []).length;
+    const countN = (valor.match(/N/g) || []).length;
+
+    if (countP > 1) {
+        alert("La letra 'P' solo puede usarse una vez.");
+        return false;
+    }
+    if (countN > 1) {
+        alert("La letra 'N' solo puede usarse una vez.");
+        return false;
+    }
+    if (countE > 2) {
+        alert("La letra 'E' solo puede usarse hasta dos veces.");
+        return false;
+    }
+
+    // Validar E al inicio y que no haya más después
+    if (valor.startsWith('E') && countE > 1) {
+        alert("Si hay una 'E' al inicio, no se permite otra 'E' después.");
+        return false;
+    }
+
+    // Validar que P tenga al menos una E después
+    const posP = valor.indexOf('P');
+    if (posP !== -1) {
+        const eDespuesDeP = valor.slice(posP + 1).includes('E');
+        if (!eDespuesDeP) {
+            alert("La letra 'P' debe tener al menos una 'E' después.");
+            return false;
         }
     }
 
-    function mostrarContador(campo) {
-        let contadorSpan = campo.parentNode.querySelector(".char-count");
-        if (!contadorSpan) {
-            contadorSpan = document.createElement("span");
-            contadorSpan.classList.add("char-count");
-            contadorSpan.style.marginLeft = "10px";
-            contadorSpan.style.fontSize = "0.8rem";
-            campo.parentNode.appendChild(contadorSpan);
-        }
-        contadorSpan.textContent = `(${campo.value.length})`;
+    return true;
+}
+
+function validarEmail(inputElement) {
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const valor = inputElement.value.trim();
+
+    if (valor === "") return; // No validar si está vacío (el atributo required lo manejará)
+
+    if (!emailRegex.test(valor)) {
+        alert("Por favor, ingrese un correo electrónico válido.");
+        inputElement.value = "";
+        inputElement.focus();
     }
+} 
 
-    function validarCampo(campo, tipo) {
-        let valor = campo.value;
-        let valido = true;
-
-        if (tipo === "letras") {
-            const regex = /^[\p{L}\p{M}\s]+$/u;
-            valido = regex.test(valor);
-        }
-
-        if (tipo === "numeros") {
-            valor = valor.replace(/[^0-9\-]/g, "");
-            valido = campo.value === valor;
-        }
-
-        if (tipo === "cedula") {
-            valor = valor.toUpperCase().replace(/[^0-9PEN\-]/g, "");
-            const letras = (valor.match(/[PEN]/g) || []);
-            valido = /^[0-9PEN\-]*$/.test(valor) && letras.length <= 1;
-        }
-
-        campo.value = valor;
-        mostrarError(campo, valido);
-        mostrarContador(campo);
-        return valido;
-    }
-
-    function impedirAvanceSiInvalido(campo, tipo) {
-        campo.addEventListener("blur", function () {
-            const valido = validarCampo(campo, tipo);
-            if (!valido) campo.focus();
-        });
-    }
-
-    // Validación en tiempo real para nombres y apellidos
-    soloLetrasIds.forEach(id => {
-        const campo = document.getElementById(id);
-        if (campo) {
-            campo.addEventListener("input", () => validarCampo(campo, "letras"));
-        }
-    });
-
-    // Validación en tiempo real para los campos de título
-    const camposTitulo = document.querySelectorAll(".titulo-input");
-    camposTitulo.forEach(campo => {
-        campo.addEventListener("input", () => validarCampo(campo, "letras"));
-    });
-
-    // Validación en tiempo real para números
-    soloNumerosIds.forEach(id => {
-        const campo = document.getElementById(id);
-        if (campo) {
-            campo.addEventListener("input", () => validarCampo(campo, "numeros"));
-        }
-    });
-
-    // Validación en tiempo real para cédula
-    const cedulaCampo = document.getElementById(campoCedulaId);
-    if (cedulaCampo) {
-        cedulaCampo.addEventListener("input", () => validarCampo(cedulaCampo, "cedula"));
-    }
-
-    // Prevenir blur si no es válido (campos obligatorios)
-    camposObligatorios.forEach(id => {
-        const campo = document.getElementById(id);
-        if (campo) {
-            let tipo = "letras";
-            if (id === "cedula") tipo = "cedula";
-            else if (id === "telefono") tipo = "numeros";
-            impedirAvanceSiInvalido(campo, tipo);
-        }
-    });
-
-    // Validación al enviar
-    if (formulario) {
-        formulario.addEventListener("submit", function (e) {
-            let esValido = true;
-            let primerCampoInvalido = null;
-
-            soloLetrasIds.forEach(id => {
-                const campo = document.getElementById(id);
-                if (campo && !validarCampo(campo, "letras")) {
-                    esValido = false;
-                    if (!primerCampoInvalido) primerCampoInvalido = campo;
-                }
-            });
-
-            camposTitulo.forEach(campo => {
-                if (!validarCampo(campo, "letras")) {
-                    esValido = false;
-                    if (!primerCampoInvalido) primerCampoInvalido = campo;
-                }
-            });
-
-            soloNumerosIds.forEach(id => {
-                const campo = document.getElementById(id);
-                if (campo && !validarCampo(campo, "numeros")) {
-                    esValido = false;
-                    if (!primerCampoInvalido) primerCampoInvalido = campo;
-                }
-            });
-
-            if (cedulaCampo && !validarCampo(cedulaCampo, "cedula")) {
-                esValido = false;
-                if (!primerCampoInvalido) primerCampoInvalido = cedulaCampo;
-            }
-
-            if (!esValido) {
-                e.preventDefault();
-                primerCampoInvalido.focus();
-            }
-        });
-    }
-});
-
-
+function primeraLetraMayuscula(inputElement) {
+    const valor = inputElement.value;
+    if (valor.length === 0) return;
+    inputElement.value = valor.charAt(0).toUpperCase() + valor.slice(1);
+}

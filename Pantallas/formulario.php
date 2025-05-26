@@ -47,7 +47,7 @@ if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
             color: #fff;
             border: 1px solid #8a2be2;
         }
-
+        
         .form-control:focus, .form-select:focus {
             box-shadow: 0 0 10px #8a2be2;
             border-color: #e0b0ff;
@@ -92,27 +92,27 @@ if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="cedula" class="form-label">Cédula</label>
-                            <input type="text" id="cedula" name="cedula" class="form-control" maxlength="20" required>
+                            <input type="text" id="cedula" name="cedula" class="form-control" maxlength="20" onkeypress="validarPEN(event, this)" oninput="validarPENPegado(this)" required>
                         </div>
                         <div class="col-md-6">
                             <label for="telefono" class="form-label">Teléfono</label>
-                            <input type="tel" id="telefono" name="telefono" class="form-control" maxlength="9" required>
+                            <input type="tel" id="telefono" name="telefono" class="form-control" maxlength="9" onkeypress="soloNumerosYGuion(event)" required>
                         </div>
                         <div class="col-md-6">
                             <label for="nombre1" class="form-label">Primer Nombre</label>
-                            <input type="text" id="nombre1" name="nombre1" class="form-control" required>
+                            <input type="text" id="nombre1" name="nombre1" class="form-control" onkeypress="soloLetrasConAcentos(event)" onblur="primeraLetraMayuscula(this)" required>
                         </div>
                         <div class="col-md-6">
                             <label for="nombre2" class="form-label">Segundo Nombre</label>
-                            <input type="text" id="nombre2" name="nombre2" class="form-control">
+                            <input type="text" id="nombre2" name="nombre2" class="form-control" onkeypress="soloLetrasConAcentos(event)" onblur="primeraLetraMayuscula(this)">
                         </div>
                         <div class="col-md-6">
                             <label for="apellido1" class="form-label">Primer Apellido</label>
-                            <input type="text" id="apellido1" name="apellido1" class="form-control" required>
+                            <input type="text" id="apellido1" name="apellido1" class="form-control" onkeypress="soloLetrasConAcentos(event)" onblur="primeraLetraMayuscula(this)" required>
                         </div>
                         <div class="col-md-6">
                             <label for="apellido2" class="form-label">Segundo Apellido</label>
-                            <input type="text" id="apellido2" name="apellido2" class="form-control">
+                            <input type="text" id="apellido2" name="apellido2" class="form-control" onkeypress="soloLetrasConAcentos(event)" onblur="primeraLetraMayuscula(this)">
                         </div>
                         <div class="col-md-4">
                             <label for="nacimiento" class="form-label">Fecha de Nacimiento</label>
@@ -143,11 +143,11 @@ if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
                         </div>
                         <div class="col-md-6" id="apellidoCasadaContainer" style="display: none;">
                             <label for="apellido_casada" class="form-label">Apellido de casada</label>
-                            <input type="text" class="form-control" id="apellido_casada" name="apellido_casada">
+                            <input type="text" class="form-control" id="apellido_casada" name="apellido_casada" onkeypress="soloLetrasConAcentos(event)">
                         </div>
                         <div class="col-md-6">
                             <label for="email" class="form-label">Correo Electrónico</label>
-                            <input type="email" id="email" name="email" class="form-control" required>
+                            <input type="email" id="email" name="email" class="form-control" onblur="validarEmail(this)" required>
                         </div>
                         <div class="col-md-4">
                             <label for="provincia" class="form-label">Provincia</label>
@@ -195,6 +195,10 @@ if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
                 <div class="text-center">
                     <button type="submit" class="btn btn-neon px-5">Enviar</button>
                 </div>
+                    <script>form.onsubmit = function () {
+                         return validarPEFinal(document.getElementById("cedula"));
+                            };
+                     </script>
             </form>
         </div>
     </main>
@@ -316,7 +320,15 @@ if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
                     </div>
                 `;
 
+              
                 document.getElementById("bloque-academico").appendChild(bloque);
+            });
+
+            // Delegación para validar en cualquier input .titulo-input nuevo o existente
+            document.getElementById("bloque-academico").addEventListener("keypress", function(event) {
+                if (event.target.classList.contains("titulo-input")) {
+                    soloLetrasConAcentos(event);
+                }
             });
         });
     </script>
