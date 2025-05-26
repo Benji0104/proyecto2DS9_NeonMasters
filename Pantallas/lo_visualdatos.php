@@ -1,39 +1,38 @@
 <?php
 require __DIR__ . '/../Assets/db/config.php';
 
-if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    die('ID inválido.');
-}
+$tipo = $_GET['tipo'] ?? '';
+$valor = $_GET['valor'] ?? '';
 
-$id = (int) $_GET['id'];
+    if ($tipo && $valor) {
+        try {
+            $pdo = new PDO("mysql:host=localhost;dbname=Datos_personales;charset=utf8", 'root', '', [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            ]);
 
-    try {
-        $pdo = new PDO("mysql:host=localhost;dbname=Academico;charset=utf8", 'root', '', [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        ]);
+            // Preparar la consulta según el tipo
+            if ($tipo === 'id') {
+                $stmt = $pdo->prepare("SELECT nombre1, nombre2, apellido1, apellido2, apellido_casada, sexo FROM formulario_datospersonales WHERE id = ?");
+            } elseif ($tipo === 'cedula') {
+                $stmt = $pdo->prepare("SELECT nombre1, nombre2, apellido1, apellido2, apellido_casada, sexo FROM formulario_datospersonales WHERE cedula = ?");
+            } else {
+                throw new Exception("Tipo inválido");
+            }
 
-        $stmt = $pdo->prepare("SELECT titulo, archivo FROM formulario_datosacademico WHERE id = ?");
-        $stmt->execute([$id]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->execute([$valor]);
+            $persona = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (!$row || empty($row['archivo'])) {
-            die('Archivo no encontrado.');
+            if ($persona) {
+                $nombreCompleto = trim($persona['nombre1'] . ' ' . ($persona['nombre2'] ?? '') . ' ' . $persona['apellido1'] . ' ' . ($persona['apellido2'] ?? '') . ' ' . ($persona['apellido_casada'] ?? ''));
+            } else {
+                echo "<p style='color:red;'>No se encontraron datos.</p>";
+                exit;
+            }
+        } catch (Exception $e) {
+            echo "<p style='color:red;'>Error: " . htmlspecialchars($e->getMessage()) . "</p>";
+            exit;
         }
-
-        $filename = $row['titulo'] ?: 'archivo';
-        $filename = preg_replace('/[^A-Za-z0-9_\-]/', '_', $filename) . '.pdf'; // Cambia extensión si sabes otra
-
-        header('Content-Description: File Transfer');
-        header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
-        header('Content-Length: ' . strlen($row['archivo']));
-        header('Cache-Control: must-revalidate');
-        header('Pragma: public');
-        header('Expires: 0');
-
-        echo $row['archivo'];
+    } else {
+        echo "<p style='color:orange;'>No se proporcionaron parámetros.</p>";
         exit;
-
-    } catch (PDOException $e) {
-        die('Error en la base de datos: ' . $e->getMessage());
     }

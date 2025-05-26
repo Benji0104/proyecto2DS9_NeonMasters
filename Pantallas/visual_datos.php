@@ -173,18 +173,12 @@ $mensaje = '';
                         <tr>
                             <th>Títulos</th>
                             <td>
-                                <?php if (count($datos['titulos']) > 0): ?>
-                                    <ul>
-                                        <?php foreach ($datos['titulos'] as $titulo): ?>
-                                            <li>
-                                                <?php echo htmlspecialchars($titulo['titulo']); ?>
-                                                - <a href="descargar_archivo.php?id=<?php echo urlencode($titulo['id']); ?>" target="_blank" class="text-info">Descargar archivo</a>
-                                            </li>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                <?php else: ?>
-                                    No hay títulos registrados.
-                                <?php endif; ?>
+                               <!-- IFRAME para mostrar lo_visualdatos.php con los mismos parámetros -->
+                                <div class="mt-4">
+                                    <h4 class="text-info">Visualización extendida</h4>
+                                    <iframe src="lo_visualdatos.php?tipo=<?php echo urlencode($tipo); ?>&valor=<?php echo urlencode($valor); ?>"
+                                            width="100%" height="500px" style="border:1px solid #ccc; border-radius: 10px;"></iframe>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
