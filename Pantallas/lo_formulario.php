@@ -95,45 +95,47 @@ error_reporting(E_ALL);
         $stmt_edad->close();
     }
 
+    $id_personal = $stmt_personal->insert_id;
+
     $stmt_personal->close();
 
-    // 4) Procesar y guardar datos académicos (múltiples)
-    $titulos  = $_POST['titulo'];
-    $archivos = $_FILES['archivo'];
+        // 4) Procesar y guardar datos académicos (múltiples)
+        $titulos  = $_POST['titulo'];
+        $archivos = $_FILES['archivo'];
 
-    $sqlA = "
-        INSERT INTO formulario_datosacademico
-        (titulo, archivo)
-        VALUES (?, ?)
-    ";
+        $sqlA = "
+            INSERT INTO formulario_datosacademico
+            (titulo, archivo, id_personal)
+            VALUES (?, ?, ?)
+        ";
 
-    $stmt_academico = $conexion_academico->prepare($sqlA);
-    if (!$stmt_academico) {
-        die("Error al preparar datos académicos: " . $conexion_academico->error);
-    }
-
-    $ok2 = true;
-    for ($i = 0; $i < count($titulos); $i++) {
-        $titulo = $titulos[$i];
-
-        if (!isset($archivos['error'][$i]) || $archivos['error'][$i] !== UPLOAD_ERR_OK) {
-            $ok2 = false;
-            break;
+        $stmt_academico = $conexion_academico->prepare($sqlA);
+        if (!$stmt_academico) {
+            die("Error al preparar datos académicos: " . $conexion_academico->error);
         }
 
-        $bin = file_get_contents($archivos['tmp_name'][$i]);
+        $ok2 = true;
+        for ($i = 0; $i < count($titulos); $i++) {
+            $titulo = $titulos[$i];
 
-        // 's' para titulo, 'b' para blob
-        $null = NULL;
-        $stmt_academico->bind_param("sb", $titulo, $null);
-        $stmt_academico->send_long_data(1, $bin);
+            if (!isset($archivos['error'][$i]) || $archivos['error'][$i] !== UPLOAD_ERR_OK) {
+                $ok2 = false;
+                break;
+            }
 
-        if (!$stmt_academico->execute()) {
-            $ok2 = false;
-            break;
+            $bin = file_get_contents($archivos['tmp_name'][$i]);
+            $null = NULL;
+
+            // título, archivo (BLOB), id_personal
+            $stmt_academico->bind_param("sbi", $titulo, $null, $id_personal);
+            $stmt_academico->send_long_data(1, $bin);
+
+            if (!$stmt_academico->execute()) {
+                $ok2 = false;
+                break;
+            }
         }
-    }
-    $stmt_academico->close();
+        $stmt_academico->close();
 
     // 5) Cerrar conexiones y redirigir
     $conexion_personal->close();
