@@ -175,7 +175,7 @@ $mensaje = '';
                         <tr>
                             <th>Títulos</th>
                             <td>
-                               <!-- IFRAME para mostrar lo_visualdatos.php con los mismos parámetros -->
+                               <!-- IFRAME -->
                                 <div class="mt-4">
                                     <h4 class="text-info">Visualización extendida</h4>
                                     <iframe src="lo_visualdatos.php?tipo=<?php echo urlencode($tipo); ?>&valor=<?php echo urlencode($valor); ?>"
