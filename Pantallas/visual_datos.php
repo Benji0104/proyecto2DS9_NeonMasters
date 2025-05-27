@@ -170,6 +170,8 @@ $mensaje = '';
                         <tr><th>Sexo</th><td><?php echo htmlspecialchars($datos['sexo']); ?></td></tr>
                         <tr><th>Teléfono</th><td><?php echo htmlspecialchars($datos['telefono']); ?></td></tr>
                         <tr><th>Provincia</th><td><?php echo htmlspecialchars($datos['provincia']); ?></td></tr>
+                        <tr><th>Provincia</th><td><?php echo htmlspecialchars($datos['distrito']); ?></td></tr>
+                        <tr><th>Provincia</th><td><?php echo htmlspecialchars($datos['corregimiento']); ?></td></tr>
                         <tr>
                             <th>Títulos</th>
                             <td>
