@@ -236,13 +236,6 @@ $mensaje = '';
 
                     <iframe id="visor-iframe" src="" width="100%" height="500px"
                         style="border:1px solid #ccc; border-radius:10px;"></iframe>
-
-                    <div style="text-align: right; margin-top: 10px;">
-                        <button id="eliminar-archivo"
-                            style="background: linear-gradient(135deg, #8a2be2, #4b0082); border: none; color: white; font-weight: bold; box-shadow: 0 0 15px #8a2be2; padding: 8px 12px; border-radius: 5px; cursor: pointer;">
-                            Eliminar archivo
-                        </button>
-                    </div>
                 </div>
 
                 <script>
@@ -276,38 +269,6 @@ $mensaje = '';
                             if (visorContainer.style.display === 'block' && !visorContainer.contains(e.target)) {
                                 visorContainer.style.display = 'none';
                                 iframe.src = '';
-                            }
-                        });
-
-                        // Eliminar archivo desde base de datos
-                        btnEliminar.addEventListener('click', function () {
-                            const url = new URL(iframe.src);
-                            const titulo_id = url.searchParams.get('titulo_id');
-
-                            if (!titulo_id) {
-                                alert("No se encontró el ID del archivo.");
-                                return;
-                            }
-
-                            if (confirm("¿Estás seguro de que deseas eliminar este archivo de la base de datos?")) {
-                                fetch('../Pantallas/eliminar_archivo.php?titulo_id=' + encodeURIComponent(titulo_id))
-                                    .then(response => response.text())
-                                    .then(data => {
-                                        alert(data);
-                                        visorContainer.style.display = 'none';
-                                        iframe.src = '';
-
-                                        // Eliminar visualmente el botón del archivo
-                                        if (botonActual) {
-                                            const li = botonActual.closest('li');
-                                            if (li) {
-                                                li.innerHTML = `<span style="color:gray;">Sin archivo</span>`;
-                                            }
-                                        }
-
-                                        botonActual = null;
-                                    })
-                                    .catch(err => alert("Error al eliminar: " + err));
                             }
                         });
                     });
