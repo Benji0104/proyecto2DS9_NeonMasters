@@ -191,7 +191,7 @@ $mensaje = '';
                                         <li>
                                             <?php echo htmlspecialchars($titulo['titulo']); ?>
                                             <button class="btn btn-link ver-archivo-btn"
-                                                    data-url="lo_visualdatos.php?tipo=<?php echo urlencode($tipo); ?>&valor=<?php echo urlencode($valor); ?>&titulo_id=<?php echo $titulo['id']; ?>">
+                                                    data-url="cargar_archivo.php?tipo=<?php echo urlencode($tipo); ?>&valor=<?php echo urlencode($valor); ?>&titulo_id=<?php echo $titulo['id']; ?>">
                                                 Ver archivo
                                             </button>
                                         </li>
