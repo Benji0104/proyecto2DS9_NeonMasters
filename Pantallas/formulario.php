@@ -15,64 +15,7 @@ if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
     <link rel="icon" href="../Assets/imagenes/icono.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        html, body {
-            height: flex;
-            margin: 0;
-            background: radial-gradient(circle at top left, #0f0c29, #302b63, #24243e);
-            color: #fff;
-            font-family: 'Orbitron', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        .formulario-container {
-            background-color: rgba(20, 20, 35, 0.95);
-            border-radius: 15px;
-            padding: 40px;
-            margin: 30px auto;
-            box-shadow: 0 0 20px rgba(138, 43, 226, 0.8);
-            max-width: 900px;
-        }
-
-        .form-section-title {
-            color: #e0b0ff;
-            text-shadow: 0 0 10px #8a2be2;
-            margin-bottom: 20px;
-        }
-
-        label {
-            color: #ccc;
-        }
-
-        .form-control, .form-select {
-            background-color: #1f1f2e;
-            color: #fff;
-            border: 1px solid #8a2be2;
-        }
-        
-        .form-control:focus, .form-select:focus {
-            box-shadow: 0 0 10px #8a2be2;
-            border-color: #e0b0ff;
-        }
-
-        .btn-neon {
-            background: linear-gradient(135deg, #8a2be2, #4b0082);
-            border: none;
-            color: white;
-            font-weight: bold;
-            box-shadow: 0 0 15px #8a2be2;
-        }
-
-        .btn-neon:hover {
-            box-shadow: 0 0 25px #8a2be2, 0 0 30px #4b0082;
-        }
-
-        footer {
-            text-align: center;
-            padding: 1rem;
-            color: #ccccff;
-            text-shadow: 0 0 10px #8a2be2;
-        }
-    </style>
+    <link href="../Assets/style/style_f.css" rel="stylesheet">
 </head>
 <body class="d-flex flex-column min-vh-100">
     <nav class="navbar navbar-dark" style="background: linear-gradient(135deg, #8a2be2, #4b0082); box-shadow: 0 0 15px #8a2be2;">

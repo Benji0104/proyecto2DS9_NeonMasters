@@ -118,56 +118,8 @@ $mensaje = '';
     <link rel="icon" href="../Assets/imagenes/icono.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background: radial-gradient(circle at top left, #0f0c29, #302b63, #24243e);
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
-            height: flex;
-            padding-top: 40px;
-        }
-
-        .dashboard-container {
-            background-color: rgba(20, 20, 35, 0.95);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(138, 43, 226, 0.7);
-            max-width: 900px;
-            margin: auto;
-        }
-
-        label, th {
-            color: #e0b0ff;
-        }
-
-        footer {
-            text-align: center;
-            padding: 1rem;
-            margin-top: 40px;
-            color: #ccccff;
-            text-shadow: 0 0 10px #8a2be2;
-        }
-
-        .form-control {
-            background-color: #1f1f2e;
-            color: #fff;
-            border: 1px solid #8a2be2;
-        }
-
-        .btn-neon {
-            background: linear-gradient(135deg, #8a2be2, #4b0082);
-            border: none;
-            color: white;
-            font-weight: bold;
-            box-shadow: 0 0 15px #8a2be2;
-        }
-
-        .btn-neon:hover {
-            box-shadow: 0 0 25px #8a2be2, 0 0 30px #4b0082;
-        }
-    </style>
+    <link href="../Assets/style/style_vd.css" rel="stylesheet">
 </head>
-
     <body>
         <div class="container dashboard-container mt-5">
             <h2 class="text-center mb-4">Buscar Datos</h2>
