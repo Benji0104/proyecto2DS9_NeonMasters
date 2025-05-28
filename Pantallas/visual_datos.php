@@ -115,6 +115,7 @@ $mensaje = '';
     <title>Visualización de datos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="/proyecto2/Scripts/validaciones.js"></script>
+    <script src="/proyecto2/Scripts/validaciones_visual.js"></script>
     <link rel="icon" href="../Assets/imagenes/icono.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
@@ -189,42 +190,6 @@ $mensaje = '';
                     <iframe id="visor-iframe" src="" width="100%" height="500px"
                         style="border:1px solid #ccc; border-radius:10px;"></iframe>
                 </div>
-
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        const visorContainer = document.getElementById('visor-iframe-container');
-                        const iframe = document.getElementById('visor-iframe');
-                        const btnCerrar = document.getElementById('cerrar-visor');
-                        const btnEliminar = document.getElementById('eliminar-archivo');
-                        let botonActual = null; // Referencia al botón que abrió el visor
-
-                        // Mostrar visor al hacer clic en "Ver archivo"
-                        document.querySelectorAll('.ver-archivo-btn').forEach(btn => {
-                            btn.addEventListener('click', (e) => {
-                                e.stopPropagation(); // Evita que el clic se propague al document
-                                const url = btn.dataset.url;
-                                iframe.src = url;
-                                visorContainer.style.display = 'block';
-                                iframe.scrollIntoView({ behavior: 'smooth' });
-                                botonActual = btn; // Guardamos el botón activo para saber cuál eliminar luego
-                            });
-                        });
-
-                        // Cerrar visor con botón ❌
-                        btnCerrar.addEventListener('click', function () {
-                            visorContainer.style.display = 'none';
-                            iframe.src = '';
-                        });
-
-                        // Cerrar visor al hacer clic fuera del contenedor
-                        document.addEventListener('click', function (e) {
-                            if (visorContainer.style.display === 'block' && !visorContainer.contains(e.target)) {
-                                visorContainer.style.display = 'none';
-                                iframe.src = '';
-                            }
-                        });
-                    });
-                </script>
             <?php endif; ?>
         </div>
         <footer class="text-center mt-4 text-muted">
