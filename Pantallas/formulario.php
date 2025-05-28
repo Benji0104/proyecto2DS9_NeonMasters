@@ -98,7 +98,8 @@ if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
                         <div class="col-md-6">
                             <label for="telefono" class="form-label">Teléfono</label>
                             <input type="tel" id="telefono" name="telefono" class="form-control" maxlength="9"
-                                onkeypress="soloNumerosYGuion(event)" required>
+                                onkeypress="soloNumerosYGuion(event)" placeholder="6770-2949" 
+                                oninput="validarTelefono(this)" required>
                         </div>
                         <div class="col-md-6">
                             <label for="nombre1" class="form-label">Primer Nombre</label>

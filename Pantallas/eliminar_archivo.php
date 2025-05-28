@@ -10,13 +10,14 @@ if ($titulo_id) {
         $stmt->execute([$titulo_id]);
 
         if ($stmt->rowCount() > 0) {
-            echo "✅ Archivo eliminado correctamente.";
+            echo "Archivo eliminado correctamente.";
         } else {
-            echo "⚠️ No se encontró archivo para eliminar.";
+            echo "No se encontró archivo para eliminar.";
         }
     } catch (PDOException $e) {
-        echo "❌ Error de base de datos: " . $e->getMessage();
+        echo "Error de base de datos: " . $e->getMessage();
     }
 } else {
     echo "❗ Falta el parámetro 'titulo_id'.";
 }
+

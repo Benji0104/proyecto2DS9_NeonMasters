@@ -74,6 +74,27 @@ $mensaje = '';
                     $titulos = $stmtTitulos->fetchAll(PDO::FETCH_ASSOC);
                 }
 
+                // --- Aquí añadimos la validación si el título tiene archivo ---
+                if (!empty($titulos)) {
+                    $titulo_ids = array_column($titulos, 'id');
+                    $placeholders = implode(',', array_fill(0, count($titulo_ids), '?'));
+
+                    $stmtArchivos = $pdoAcademico->prepare("
+                        SELECT id, archivo IS NOT NULL AS tiene_archivo 
+                        FROM formulario_datosacademico 
+                        WHERE id IN ($placeholders)
+                    ");
+                    $stmtArchivos->execute($titulo_ids);
+                    // Obtenemos [id => tiene_archivo]
+                    $archivos = $stmtArchivos->fetchAll(PDO::FETCH_KEY_PAIR);
+
+                    foreach ($titulos as &$titulo) {
+                        $titulo['tiene_archivo'] = !empty($archivos[$titulo['id']]);
+                    }
+                    unset($titulo);
+                }
+                // ---------------------------------------------------------------
+
                 $datos['titulos'] = $titulos;
 
             } else {
@@ -93,6 +114,7 @@ $mensaje = '';
     <meta charset="UTF-8">
     <title>Visualización de datos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/proyecto2/Scripts/validaciones.js"></script>
     <link rel="icon" href="../Assets/imagenes/icono.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
@@ -160,7 +182,7 @@ $mensaje = '';
                     </div>
                     <div class="col-md-6">
                         <label for="valor" class="form-label">Valor</label>
-                        <input type="text" name="valor" id="valor" class="form-control" placeholder="Ingrese el valor" required
+                        <input type="text" name="valor" id="valor" class="form-control" placeholder="Ingrese el valor" onkeypress="soloNumerosYGuion(event)" required
                             value="<?php echo htmlspecialchars($_GET['valor'] ?? ''); ?>">
                     </div>
                     <div class="col-md-3">
@@ -190,10 +212,14 @@ $mensaje = '';
                                     <?php foreach ($datos['titulos'] as $titulo): ?>
                                         <li>
                                             <?php echo htmlspecialchars($titulo['titulo']); ?>
-                                            <button class="btn btn-link ver-archivo-btn"
+                                            <?php if (!empty($titulo['tiene_archivo'])): ?>
+                                                <button class="btn btn-link ver-archivo-btn"
                                                     data-url="cargar_archivo.php?tipo=<?php echo urlencode($tipo); ?>&valor=<?php echo urlencode($valor); ?>&titulo_id=<?php echo $titulo['id']; ?>">
-                                                Ver archivo
-                                            </button>
+                                                    Ver archivo
+                                                </button>
+                                            <?php else: ?>
+                                                <span style="color: gray; font-style: italic;">Sin archivo</span>
+                                            <?php endif; ?>
                                         </li>
                                     <?php endforeach; ?>
                                 </ul>
@@ -203,20 +229,85 @@ $mensaje = '';
                 </table>
 
                 <!-- Contenedor único para el iframe, oculto inicialmente -->
-                <div id="visor-iframe-container" style="display:none; margin-top:20px;">
-                    <h4 class="text-info">Visualización extendida</h4>
-                    <iframe id="visor-iframe" src="" width="100%" height="500px" style="border:1px solid #ccc; border-radius:10px;"></iframe>
+                <div id="visor-iframe-container" style="display:none; margin-top:20px; position: relative;">
+                    <button id="cerrar-visor" style="position: absolute; top: 5px; right: 5px; background: transparent; border: none; font-size: 20px; cursor: pointer;">❌</button>
+                    <h4 class="text-info">Visualización</h4>
+
+                    <iframe id="visor-iframe" src="" width="100%" height="500px"
+                        style="border:1px solid #ccc; border-radius:10px;"></iframe>
+
+                    <div style="text-align: right; margin-top: 10px;">
+                        <button id="eliminar-archivo"
+                            style="background: linear-gradient(135deg, #8a2be2, #4b0082); border: none; color: white; font-weight: bold; box-shadow: 0 0 15px #8a2be2; padding: 8px 12px; border-radius: 5px; cursor: pointer;">
+                            Eliminar archivo
+                        </button>
+                    </div>
                 </div>
 
                 <script>
-                    document.querySelectorAll('.ver-archivo-btn').forEach(btn => {
-                        btn.addEventListener('click', () => {
-                            const url = btn.dataset.url;
-                            const container = document.getElementById('visor-iframe-container');
-                            const iframe = document.getElementById('visor-iframe');
-                            iframe.src = url;              // Cambia la fuente del iframe
-                            container.style.display = 'block';  // Muestra el iframe
-                            iframe.scrollIntoView({ behavior: 'smooth' }); // Opcional: baja hasta el iframe
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const visorContainer = document.getElementById('visor-iframe-container');
+                        const iframe = document.getElementById('visor-iframe');
+                        const btnCerrar = document.getElementById('cerrar-visor');
+                        const btnEliminar = document.getElementById('eliminar-archivo');
+                        let botonActual = null; // Referencia al botón que abrió el visor
+
+                        // Mostrar visor al hacer clic en "Ver archivo"
+                        document.querySelectorAll('.ver-archivo-btn').forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                e.stopPropagation(); // Evita que el clic se propague al document
+                                const url = btn.dataset.url;
+                                iframe.src = url;
+                                visorContainer.style.display = 'block';
+                                iframe.scrollIntoView({ behavior: 'smooth' });
+                                botonActual = btn; // Guardamos el botón activo para saber cuál eliminar luego
+                            });
+                        });
+
+                        // Cerrar visor con botón ❌
+                        btnCerrar.addEventListener('click', function () {
+                            visorContainer.style.display = 'none';
+                            iframe.src = '';
+                        });
+
+                        // Cerrar visor al hacer clic fuera del contenedor
+                        document.addEventListener('click', function (e) {
+                            if (visorContainer.style.display === 'block' && !visorContainer.contains(e.target)) {
+                                visorContainer.style.display = 'none';
+                                iframe.src = '';
+                            }
+                        });
+
+                        // Eliminar archivo desde base de datos
+                        btnEliminar.addEventListener('click', function () {
+                            const url = new URL(iframe.src);
+                            const titulo_id = url.searchParams.get('titulo_id');
+
+                            if (!titulo_id) {
+                                alert("No se encontró el ID del archivo.");
+                                return;
+                            }
+
+                            if (confirm("¿Estás seguro de que deseas eliminar este archivo de la base de datos?")) {
+                                fetch('../Pantallas/eliminar_archivo.php?titulo_id=' + encodeURIComponent(titulo_id))
+                                    .then(response => response.text())
+                                    .then(data => {
+                                        alert(data);
+                                        visorContainer.style.display = 'none';
+                                        iframe.src = '';
+
+                                        // Eliminar visualmente el botón del archivo
+                                        if (botonActual) {
+                                            const li = botonActual.closest('li');
+                                            if (li) {
+                                                li.innerHTML = `<span style="color:gray;">Sin archivo</span>`;
+                                            }
+                                        }
+
+                                        botonActual = null;
+                                    })
+                                    .catch(err => alert("Error al eliminar: " + err));
+                            }
                         });
                     });
                 </script>

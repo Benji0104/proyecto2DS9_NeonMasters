@@ -16,6 +16,18 @@ function soloNumerosYGuion(event) {
     }
 }
 
+
+function validarTelefono(input) {
+    // Expresión regular para formato 4 dígitos - 4 dígitos
+    const regex = /^\d{4}-\d{4}$/;
+
+    if (regex.test(input.value)) {
+        input.setCustomValidity(''); // válido
+    } else {
+        input.setCustomValidity('El teléfono debe tener el formato XXXX-XXXX');
+    }
+}
+
 function validarPEN(event, inputElement) {
     const tecla = event.key.toUpperCase();
     const allowedNumbers = /^[0-9]$/;
