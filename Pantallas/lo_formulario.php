@@ -19,33 +19,40 @@ require __DIR__ . '/../Assets/db/config.php';
 
     function insertarDatosPersonales(PDO $db, array $data): int {
         $sql = "INSERT INTO formulario_datospersonales (
-            cedula, nombre1, nombre2, apellido1, apellido2, apellido_casada,
+            cedula, nombre1, nombre2, apellido1, apellido2, apellido_casada, usa_apellido_casada,
             fecha_nacimiento, sexo, estado_civil, telefono, email, provincia, distrito, corregimiento
         ) VALUES (
-            :cedula, :nombre1, :nombre2, :apellido1, :apellido2, :apellido_casada,
+            :cedula, :nombre1, :nombre2, :apellido1, :apellido2, :apellido_casada, :usa_apellido_casada,
             :fecha_nacimiento, :sexo, :estado_civil, :telefono, :email, :provincia, :distrito, :corregimiento
         )";
-
+    
+        $apellidoCasada = !empty($data['apellido_casada']) ? $data['apellido_casada'] : null;
+    
+        // Convertir el valor del checkbox a booleano 1 o 0
+        $usaApellidoCasada = isset($data['usa_apellido_casada']) && $data['usa_apellido_casada'] === 'on' ? 1 : 0;
+    
         $stmt = $db->prepare($sql);
         $stmt->execute([
-            ':cedula'           => $data['cedula'],
-            ':nombre1'          => $data['nombre1'],
-            ':nombre2'          => $data['nombre2'] ?: null,
-            ':apellido1'        => $data['apellido1'],
-            ':apellido2'        => $data['apellido2'] ?: null,
-            ':apellido_casada'  => ($data['sexo'] === 'Femenino' && !empty($data['apellido_casada'])) ? $data['apellido_casada'] : null,
-            ':fecha_nacimiento' => $data['nacimiento'],
-            ':sexo'             => $data['sexo'],
-            ':estado_civil'     => $data['estado'],
-            ':telefono'         => $data['telefono'],
-            ':email'            => $data['email'],
-            ':provincia'        => $data['provincia'],
-            ':distrito'         => $data['distrito'],
-            ':corregimiento'    => $data['corregimiento'],
+            ':cedula'              => $data['cedula'],
+            ':nombre1'             => $data['nombre1'],
+            ':nombre2'             => $data['nombre2'] ?: null,
+            ':apellido1'           => $data['apellido1'],
+            ':apellido2'           => $data['apellido2'] ?: null,
+            ':apellido_casada'     => $apellidoCasada,
+            ':usa_apellido_casada' => $usaApellidoCasada,
+            ':fecha_nacimiento'    => $data['nacimiento'],
+            ':sexo'                => $data['sexo'],
+            ':estado_civil'        => $data['estado'],
+            ':telefono'            => $data['telefono'],
+            ':email'               => $data['email'],
+            ':provincia'           => $data['provincia'],
+            ':distrito'            => $data['distrito'],
+            ':corregimiento'       => $data['corregimiento']
         ]);
+    
         return (int)$db->lastInsertId();
     }
-
+    
     function actualizarEdad(PDO $db, int $id): void {
         $sql = "UPDATE formulario_datospersonales 
                 SET edad = TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) 

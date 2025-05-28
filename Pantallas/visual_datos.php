@@ -28,8 +28,19 @@ $mensaje = '';
 
             if ($datos) {
                 // Construcción del nombre completo
-                $nombreCompleto = trim($datos['nombre1'] . ' ' . ($datos['nombre2'] ?? '') . ' ' . $datos['apellido1'] . ' ' . ($datos['apellido2'] ?? '') . ' ' . ($datos['apellido_casada'] ?? ''));
-                $datos['nombre'] = preg_replace('/\s+/', ' ', $nombreCompleto); // limpia espacios dobles
+                $apellidoCasadaFormateado = '';
+                if (!empty($datos['apellido_casada']) && !empty($datos['usa_apellido_casada'])) {
+                    $apellidoCasadaFormateado = ' de ' . $datos['apellido_casada'];
+                }
+                $nombreCompleto = trim(
+                    $datos['nombre1'] . ' ' .
+                    ($datos['nombre2'] ?? '') . ' ' .
+                    $datos['apellido1'] . ' ' .
+                    ($datos['apellido2'] ?? '') .
+                    $apellidoCasadaFormateado
+                );
+                // Limpieza de espacios extra
+                $datos['nombre'] = preg_replace('/\s+/', ' ', $nombreCompleto);
 
                 // Calcular edad
                 if (!empty($datos['fecha_nacimiento'])) {
@@ -175,16 +186,40 @@ $mensaje = '';
                         <tr>
                             <th>Títulos</th>
                             <td>
-                               <!-- IFRAME -->
-                                <div class="mt-4">
-                                    <h4 class="text-info">Visualización extendida</h4>
-                                    <iframe src="lo_visualdatos.php?tipo=<?php echo urlencode($tipo); ?>&valor=<?php echo urlencode($valor); ?>"
-                                            width="100%" height="500px" style="border:1px solid #ccc; border-radius: 10px;"></iframe>
-                                </div>
+                                <ul>
+                                    <?php foreach ($datos['titulos'] as $titulo): ?>
+                                        <li>
+                                            <?php echo htmlspecialchars($titulo['titulo']); ?>
+                                            <button class="btn btn-link ver-archivo-btn"
+                                                    data-url="lo_visualdatos.php?tipo=<?php echo urlencode($tipo); ?>&valor=<?php echo urlencode($valor); ?>&titulo_id=<?php echo $titulo['id']; ?>">
+                                                Ver archivo
+                                            </button>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+
+                <!-- Contenedor único para el iframe, oculto inicialmente -->
+                <div id="visor-iframe-container" style="display:none; margin-top:20px;">
+                    <h4 class="text-info">Visualización extendida</h4>
+                    <iframe id="visor-iframe" src="" width="100%" height="500px" style="border:1px solid #ccc; border-radius:10px;"></iframe>
+                </div>
+
+                <script>
+                    document.querySelectorAll('.ver-archivo-btn').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const url = btn.dataset.url;
+                            const container = document.getElementById('visor-iframe-container');
+                            const iframe = document.getElementById('visor-iframe');
+                            iframe.src = url;              // Cambia la fuente del iframe
+                            container.style.display = 'block';  // Muestra el iframe
+                            iframe.scrollIntoView({ behavior: 'smooth' }); // Opcional: baja hasta el iframe
+                        });
+                    });
+                </script>
             <?php endif; ?>
         </div>
         <footer class="text-center mt-4 text-muted">

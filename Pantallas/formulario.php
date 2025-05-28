@@ -147,10 +147,17 @@ if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
                                 <option value="Unido">Unido</option>
                             </select>
                         </div>
+
                         <div class="col-md-6" id="apellidoCasadaContainer" style="display: none;">
                             <label for="apellido_casada" class="form-label">Apellido de casada</label>
                             <input type="text" class="form-control" id="apellido_casada" name="apellido_casada"
                                 onkeypress="soloLetrasConAcentos(event)">
+                                <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="usa_apellido_casada" name="usa_apellido_casada">
+                                <label class="form-check-label" for="usa_apellido_casada">
+                                    ¿Usa el apellido de casada?
+                                </label>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <label for="email" class="form-label">Correo Electrónico</label>
@@ -240,13 +247,16 @@ if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
             const sexo = document.getElementById("sexo");
             const estado = document.getElementById("estado");
             const apellidoCasadaContainer = document.getElementById("apellidoCasadaContainer");
+            const usaApellidoCasada = document.getElementById("usa_apellido_casada");
+            const apellidoCasadaInput = document.getElementById("apellido_casada");
 
             function actualizarCampoCasada() {
                 if (sexo.value === "Femenino" && estado.value === "Casado") {
                     apellidoCasadaContainer.style.display = "block";
                 } else {
                     apellidoCasadaContainer.style.display = "none";
-                    document.getElementById("apellido_casada").value = '';
+                    usaApellidoCasada.checked = false;
+                    apellidoCasadaInput.value = '';
                 }
             }
 

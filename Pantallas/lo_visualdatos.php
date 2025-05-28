@@ -12,9 +12,9 @@ $valor = $_GET['valor'] ?? '';
 
             // Preparar la consulta según el tipo
             if ($tipo === 'id') {
-                $stmt = $pdo->prepare("SELECT nombre1, nombre2, apellido1, apellido2, apellido_casada, sexo FROM formulario_datospersonales WHERE id = ?");
+                $stmt = $pdo->prepare("SELECT nombre1, nombre2, apellido1, apellido2, apellido_casada, usa_apellido_casada, sexo FROM formulario_datospersonales WHERE id = ?");
             } elseif ($tipo === 'cedula') {
-                $stmt = $pdo->prepare("SELECT nombre1, nombre2, apellido1, apellido2, apellido_casada, sexo FROM formulario_datospersonales WHERE cedula = ?");
+                $stmt = $pdo->prepare("SELECT nombre1, nombre2, apellido1, apellido2, apellido_casada, usa_apellido_casada, sexo FROM formulario_datospersonales WHERE cedula = ?");
             } else {
                 throw new Exception("Tipo inválido");
             }
@@ -23,7 +23,13 @@ $valor = $_GET['valor'] ?? '';
             $persona = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($persona) {
-                $nombreCompleto = trim($persona['nombre1'] . ' ' . ($persona['nombre2'] ?? '') . ' ' . $persona['apellido1'] . ' ' . ($persona['apellido2'] ?? '') . ' ' . ($persona['apellido_casada'] ?? ''));
+                $nombreCompleto = trim(
+                    $persona['nombre1'] . ' ' .
+                    ($persona['nombre2'] ?? '') . ' ' .
+                    $persona['apellido1'] . ' ' .
+                    ($persona['apellido2'] ?? '') . ' ' .
+                    ((isset($persona['usa_apellido_casada']) && $persona['usa_apellido_casada']) ? ($persona['apellido_casada'] ?? '') : '')
+                );
             } else {
                 echo "<p style='color:red;'>No se encontraron datos.</p>";
                 exit;

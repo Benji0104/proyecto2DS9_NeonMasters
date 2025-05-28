@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-05-2025 a las 04:08:58
+-- Tiempo de generación: 28-05-2025 a las 03:53:56
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -35,6 +35,7 @@ CREATE TABLE `formulario_datospersonales` (
   `apellido1` varchar(50) NOT NULL,
   `apellido2` varchar(50) DEFAULT NULL,
   `apellido_casada` varchar(50) DEFAULT NULL,
+  `usa_apellido_casada` tinyint(1) DEFAULT 0,
   `fecha_nacimiento` date NOT NULL,
   `edad` int(4) DEFAULT 0,
   `sexo` enum('Masculino','Femenino') NOT NULL,
@@ -45,17 +46,6 @@ CREATE TABLE `formulario_datospersonales` (
   `distrito` varchar(50) NOT NULL,
   `corregimiento` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `formulario_datospersonales`
---
-
-INSERT INTO `formulario_datospersonales` (`id`, `cedula`, `nombre1`, `nombre2`, `apellido1`, `apellido2`, `apellido_casada`, `fecha_nacimiento`, `edad`, `sexo`, `estado_civil`, `telefono`, `email`, `provincia`, `distrito`, `corregimiento`) VALUES
-(1, '8-1043-235', 'er', 'we', 'shi', 'wa', NULL, '2003-03-04', 22, 'Masculino', 'Soltero', '6705-2422', 'pruebra1denose@gmail.com', 'Panamá Oeste', 'La Chorrera', 'Barrio Balboa'),
-(2, '8-5324-213', 'ewr', 'wqwd', 'eqe', 'asdas', NULL, '2003-04-10', 22, 'Masculino', 'Soltero', '6334-5321', 'prueba2@gmail.com', 'Los Santos', 'Macaracas', 'Chupá'),
-(3, '8-5231-213', 'qqqqqww', 'ewsda', 'asdads', 'efwfa', NULL, '1997-01-09', 28, 'Masculino', 'Casado', '6876-2421', 'prueba3@gmail.com', 'Bocas del Toro', 'Bocas del Toro', 'Punta Laurel'),
-(4, '8-3424-32', 'ter', 'ne', 'war', 'sib', NULL, '1994-11-15', 0, 'Masculino', 'Viudo', '6234-6234', 'prueb4@gmail.com', 'Panamá Oeste', 'La Chorrera', 'Hurtado'),
-(5, '8-4234-0835', 'qar', 'son', 'wau', 'lon', NULL, '2002-04-29', 23, 'Femenino', 'Soltero', '6927-4321', 'larson@gmail.com', 'Herrera', 'Pesé', 'Rincón Hondo');
 
 --
 -- Índices para tablas volcadas
@@ -75,7 +65,7 @@ ALTER TABLE `formulario_datospersonales`
 -- AUTO_INCREMENT de la tabla `formulario_datospersonales`
 --
 ALTER TABLE `formulario_datospersonales`
-  MODIFY `id` int(90) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(90) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
