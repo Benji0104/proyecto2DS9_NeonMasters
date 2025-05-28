@@ -167,6 +167,7 @@ $mensaje = '';
         }
     </style>
 </head>
+
     <body>
         <div class="container dashboard-container mt-5">
             <h2 class="text-center mb-4">Buscar Datos</h2>
