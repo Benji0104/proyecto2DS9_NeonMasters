@@ -1,46 +1,53 @@
-  body {
-            background: radial-gradient(circle at top left, #0f0c29, #302b63, #24243e);
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
-            height: flex;
-            padding-top: 40px;
-        }
+body {
+    background: radial-gradient(circle at top left, #0f0c29, #302b63, #24243e);
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    height: flex;
+    padding-top: 40px;
+}
 
-        .dashboard-container {
-            background-color: rgba(20, 20, 35, 0.95);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(138, 43, 226, 0.7);
-            max-width: 900px;
-            margin: auto;
-        }
+.dashboard-container {
+    background-color: rgba(20, 20, 35, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.7);
+    max-width: 900px;
+    margin: auto;
+}
 
-        label, th {
-            color: #e0b0ff;
-        }
+label, th {
+    color: #e0b0ff;
+}
 
-        footer {
-            text-align: center;
-            padding: 1rem;
-            margin-top: 40px;
-            color: #ccccff;
-            text-shadow: 0 0 10px #8a2be2;
-        }
+footer {
+    text-align: center;
+    padding: 1rem;
+    margin-top: 40px;
+    color: #ccccff;
+    text-shadow: 0 0 10px #8a2be2;
+}
 
-        .form-control {
-            background-color: #1f1f2e;
-            color: #fff;
-            border: 1px solid #8a2be2;
-        }
+.form-control {
+    background-color: #1f1f2e;
+    color: #fff;
+    border: 1px solid #8a2be2;
+}
 
-        .btn-neon {
-            background: linear-gradient(135deg, #8a2be2, #4b0082);
-            border: none;
-            color: white;
-            font-weight: bold;
-            box-shadow: 0 0 15px #8a2be2;
-        }
+.btn-neon {
+    background: linear-gradient(135deg, #8a2be2, #4b0082);
+    border: none;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 0 15px #8a2be2;
+}
 
-        .btn-neon:hover {
-            box-shadow: 0 0 25px #8a2be2, 0 0 30px #4b0082;
-        }
+.btn-neon:hover {
+    box-shadow: 0 0 25px #8a2be2, 0 0 30px #4b0082;
+}
+
+.navbar-brand{
+    font-family: 'Orbitron', sans-serif;
+    color: #fff;
+    text-shadow: 0 0 10px #e0b0ff;
+    text-decoration: none;
+}
