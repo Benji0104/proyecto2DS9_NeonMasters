@@ -116,12 +116,40 @@ $mensaje = '';
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="/proyecto2/Scripts/validaciones.js"></script>
     <script src="/proyecto2/Scripts/validaciones_visual.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
     <link rel="icon" href="../Assets/imagenes/icono.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <link href="../Assets/style/style_vd.css" rel="stylesheet">
 </head>
     <body>
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #8a2be2, #4b0082); box-shadow: 0 0 15px #8a2be2;">
+            <div class="container-fluid">
+                <a href="NeonMasters.php" class="navbar-brand">Neon Masters</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Cuenta
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
+                                <li>
+                                <a class="dropdown-item" href="registro.php">Registrar usuario</a> 
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="NeonMasters.php">Cerrar sesión</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
         <div class="container dashboard-container mt-5">
             <h2 class="text-center mb-4">Buscar Datos</h2>
 
@@ -163,6 +191,37 @@ $mensaje = '';
                             <th>Títulos</th>
                             <td>
                                 <ul>
+                                    <?php
+                                        // Orden personalizado
+                                        $orden_prioridad = [
+                                            'Doctorado' => 1,
+                                            'Maestría' => 2,
+                                            'Licenciatura' => 3,
+                                            'Ingeniería' => 3,
+                                            'Técnico' => 4,
+                                            'Certificación' => 5,
+                                            'Certificado' => 5,
+                                            'Curso' => 6
+                                        ];
+
+                                        // Función para obtener prioridad según nombre del título
+                                        function obtener_prioridad($titulo, $orden_prioridad) {
+                                            foreach ($orden_prioridad as $clave => $prioridad) {
+                                                if (stripos($titulo, $clave) !== false) {
+                                                    return $prioridad;
+                                                }
+                                            }
+                                            return 999; // Valor alto para lo que no se reconoce
+                                        }
+
+                                        // Ordenar los títulos antes de mostrarlos
+                                        usort($datos['titulos'], function ($a, $b) use ($orden_prioridad) {
+                                            $prioridadA = obtener_prioridad($a['titulo'], $orden_prioridad);
+                                            $prioridadB = obtener_prioridad($b['titulo'], $orden_prioridad);
+                                            return $prioridadA - $prioridadB;
+                                        });
+                                    ?>
+
                                     <?php foreach ($datos['titulos'] as $titulo): ?>
                                         <li>
                                             <?php echo htmlspecialchars($titulo['titulo']); ?>

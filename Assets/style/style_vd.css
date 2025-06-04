@@ -2,8 +2,11 @@ body {
     background: radial-gradient(circle at top left, #0f0c29, #302b63, #24243e);
     color: #fff;
     font-family: 'Orbitron', sans-serif;
-    height: flex;
-    padding-top: 40px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;    
+    padding: 0; 
+    margin: 0;
 }
 
 .dashboard-container {
