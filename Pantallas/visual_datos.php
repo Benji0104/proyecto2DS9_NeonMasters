@@ -44,7 +44,7 @@ $mensaje = '';
                     ($datos['apellido2'] ?? '') .
                     $apellidoCasadaFormateado
                 );
-                // Limpieza de espacios extra
+                // Eliminar espacios extra y asignar al campo nombre
                 $datos['nombre'] = preg_replace('/\s+/', ' ', $nombreCompleto);
 
                 // Calcular edad
