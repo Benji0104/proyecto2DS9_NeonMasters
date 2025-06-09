@@ -84,7 +84,7 @@ require __DIR__ . '/../Assets/db/config.php';
         return true;
     }
 
-    // --- PROCESO PRINCIPAL ---
+    //PROCESO PRINCIPAL 
 
     try {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -107,7 +107,7 @@ require __DIR__ . '/../Assets/db/config.php';
 
         $ok = insertarDatosAcademicos($conexion_academico, $titulos, $archivos, $id_personal);
 
-        $conexion_personal = null;  // cierra conexión PDO
+        $conexion_personal = null;  
         $conexion_academico = null;
 
         if ($ok) {

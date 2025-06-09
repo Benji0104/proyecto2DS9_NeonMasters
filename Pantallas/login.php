@@ -15,6 +15,13 @@ unset($_SESSION['login_error']);
     <link href="../Assets/style/style_l.css" rel="stylesheet">
 </head>
 <body class="d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-dark" style="background: linear-gradient(135deg, #8a2be2, #4b0082); box-shadow: 0 0 15px #8a2be2;">
+        <div class="container-fluid">
+            <a href="index.php" class="navbar-brand mb-0 h1" style="font-family: 'Orbitron', sans-serif; color: #fff; text-shadow: 0 0 10px #e0b0ff; text-decoration: none;">
+                Neon Masters
+            </a>
+        </div>
+    </nav>
 
     <main class="flex-fill d-flex justify-content-center align-items-center">
         <div class="login-container">

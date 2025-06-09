@@ -20,7 +20,7 @@ if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
 <body class="d-flex flex-column min-vh-100">
     <nav class="navbar navbar-dark" style="background: linear-gradient(135deg, #8a2be2, #4b0082); box-shadow: 0 0 15px #8a2be2;">
         <div class="container-fluid">
-            <a href="NeonMasters.php" class="navbar-brand mb-0 h1" style="font-family: 'Orbitron', sans-serif; color: #fff; text-shadow: 0 0 10px #e0b0ff; text-decoration: none;">
+            <a href="index.php" class="navbar-brand mb-0 h1" style="font-family: 'Orbitron', sans-serif; color: #fff; text-shadow: 0 0 10px #e0b0ff; text-decoration: none;">
                 Neon Masters
             </a>
         </div>

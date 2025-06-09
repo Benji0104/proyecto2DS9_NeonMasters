@@ -47,7 +47,7 @@
                 <div class="card p-4 h-100">
                     <h4 class="card-title mb-3">Software Desarrollado</h4>
                     <p>Explora el software que hemos creado.</p>
-                    <a href="Pantallas/software.php" class="btn btn-neon mt-3">Ir</a>
+                    <a href="softwaDe.php" class="btn btn-neon mt-3">Ir</a>
                 </div>
             </div>
         </div>

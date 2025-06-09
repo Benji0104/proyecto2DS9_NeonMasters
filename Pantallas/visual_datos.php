@@ -1,5 +1,10 @@
 <?php
 require __DIR__ . '/../Assets/db/config.php';
+require '../Pantallas/ca_seguridad.php';
+
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 
 $tipo = $_GET['tipo'] ?? '';
 $valor = $_GET['valor'] ?? '';
@@ -122,11 +127,31 @@ $mensaje = '';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <link href="../Assets/style/style_vd.css" rel="stylesheet">
+    <script>
+        (function() {
+        // Detecta inmediatamente si la página se cargó desde el back/forward cache (bfcache)
+        if (window.performance) {
+            const entries = window.performance.getEntriesByType('navigation');
+            if (entries.length > 0 && entries[0].type === 'back_forward') {
+            // Recarga rápido para validar sesión y evitar contenido cacheado
+            window.location.reload(true);
+            return;
+            }
+        }
+
+        // Fallback: escucha 'pageshow' para casos donde 'performance' no detecte bfcache
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+            window.location.reload(true);
+            }
+        });
+        })();
+    </script>
 </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #8a2be2, #4b0082); box-shadow: 0 0 15px #8a2be2;">
             <div class="container-fluid">
-                <a href="NeonMasters.php" class="navbar-brand">Neon Masters</a>
+                <a href="index.php" class="navbar-brand">Neon Masters</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -141,7 +166,7 @@ $mensaje = '';
                                 <a class="dropdown-item" href="registro.php">Registrar usuario</a> 
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="NeonMasters.php">Cerrar sesión</a>
+                                    <a class="dropdown-item" href="logout.php">Cerrar sesión</a>
                                 </li>
                             </ul>
                         </li>
