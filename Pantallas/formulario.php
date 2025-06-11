@@ -38,12 +38,14 @@ if (isset($_GET['enviado']) && $_GET['enviado'] == 1) {
                             <label for="cedula" class="form-label">Cédula</label>
                             <input type="text" id="cedula" name="cedula" class="form-control" maxlength="11"
                                 onkeypress="validarPEN(event, this)" oninput="validarPENPegado(this)" required>
+                            <small style="color: #FAF201;">Se aceptan formatos solo de Panamá</small>
                         </div>
                         <div class="col-md-6">
                             <label for="telefono" class="form-label">Teléfono</label>
                             <input type="tel" id="telefono" name="telefono" class="form-control" maxlength="9"
                                 onkeypress="soloNumerosYGuion(event)" placeholder="6770-2949" 
                                 oninput="validarTelefono(this)" required>
+                            <small style="color: #FAF201;">El formato de Panamá inicia con el número 6</small>
                         </div>
                         <div class="col-md-6">
                             <label for="nombre1" class="form-label">Primer Nombre</label>

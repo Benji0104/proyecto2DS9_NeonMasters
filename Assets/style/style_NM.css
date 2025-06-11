@@ -1,11 +1,15 @@
 body {
     background: radial-gradient(circle at top left, #0f0c29, #302b63, #24243e);
-    color: #fff;
     font-family: 'Orbitron', sans-serif;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
+
+* {
+    color: #fff;
+}
+
 
 .container-main {
     flex-grow: 1;
