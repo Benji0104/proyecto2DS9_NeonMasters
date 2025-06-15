@@ -1,3 +1,7 @@
+/**
+ * Este código maneja el registro de usuarios, validando datos y almacenándolos en una base de datos.
+ * This code handles user registration, validating data and storing it in a database.
+ */
 <?php
 session_start();
 require __DIR__ . '/../Assets/db/config.php';

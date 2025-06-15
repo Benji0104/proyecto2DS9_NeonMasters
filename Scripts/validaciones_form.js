@@ -1,4 +1,7 @@
-//Validar el formulario
+/**
+ * Referencia al formulario con ID "formulario" para validación.
+ * Reference to the form with ID "formulario" for validation.
+ */
 document.addEventListener("DOMContentLoaded", function () {
     const formulario = document.getElementById("formulario");
     formulario.onsubmit = function () {
@@ -6,7 +9,10 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 });
 
-//Campo dinámico si la mujer es casada
+/**
+ * Actualiza la visibilidad del campo "Apellido de Casada" según el sexo y estado civil seleccionados.
+ * Updates the visibility of the "Married Last Name" field based on the selected gender and marital status.
+ */
 document.addEventListener("DOMContentLoaded", function () {
     const sexo = document.getElementById("sexo");
     const estado = document.getElementById("estado");
@@ -28,8 +34,10 @@ document.addEventListener("DOMContentLoaded", function () {
     estado.addEventListener("change", actualizarCampoCasada);
 });
 
-
-//Para jalar los datos de provincias.json
+ /**
+ * Busca un distrito en la lista de distritos de la provincia que coincida con el valor seleccionado.
+ * Finds a district in the province's district list that matches the selected value.
+ */
 document.addEventListener("DOMContentLoaded", function () {
     const provinciasSelect = document.getElementById("provincia");
     const distritoSelect = document.getElementById("distrito");
@@ -81,7 +89,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 });
 
-// Calcular edad en tiempo real
+// Calcula la edad en tiempo real al cambiar la fecha de nacimiento.
+// Calculates the age in real-time when the birth date is changed.
 document.getElementById('nacimiento').addEventListener('change', function () {
     const fechaNacimiento = new Date(this.value);
     const hoy = new Date();
@@ -93,7 +102,8 @@ document.getElementById('nacimiento').addEventListener('change', function () {
     document.getElementById('edad').value = edad;
 });
 
-//Bloques dinamicos para agregar y quitar los datos academicos
+// Bloques dinámicos para agregar y quitar datos académicos.
+// Dynamic blocks to add and remove academic data.
 document.addEventListener("DOMContentLoaded", function () {
     let contador = 1;
 
@@ -101,7 +111,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const agregarBtn = document.getElementById("agregarTitulo");
     const quitarBtn = document.getElementById("quitarTitulo");
 
-    // Inicializar botón quitar
+    // Inicializa el botón para quitar bloques.
+    // Initializes the button to remove blocks.
     actualizarBotonQuitar();
 
     agregarBtn.addEventListener("click", function () {
@@ -139,7 +150,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Eliminar bloque individual con botón interno 🗑
+    // Elimina un bloque individual con el botón interno.
+    // Deletes an individual block using the internal button.
     bloqueAcademico.addEventListener("click", function (event) {
         if (event.target.classList.contains("eliminar-bloque")) {
             const bloques = bloqueAcademico.getElementsByClassName("bloque-titulo");
@@ -154,22 +166,26 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Validación de letras con acentos en inputs
+    // Valida letras con acentos en los inputs de títulos.
+    // Validates accented letters in title inputs.
     bloqueAcademico.addEventListener("keypress", function(event) {
         if (event.target.classList.contains("titulo-input")) {
             soloLetrasConAcentos(event); // asegúrate de tener esta función definida
         }
     });
 
-    // Desactiva el botón quitar si solo queda un bloque
+    // Desactiva el botón quitar si solo queda un bloque.
+    // Disables the remove button if only one block remains.
     function actualizarBotonQuitar() {
         const bloques = bloqueAcademico.getElementsByClassName("bloque-titulo");
         quitarBtn.disabled = bloques.length <= 1;
     }
 });
 
-
-//Evitar la introduccion de numeros por las teclas o pegarlo
+/**
+ * Bloquea la entrada de texto y pegado en el campo de fecha de nacimiento.
+ * Prevents text input and pasting in the birth date field.
+ */
 function bloquearEntradaNacimiento() {
     const nacimientoInput = document.getElementById("nacimiento");
     if (!nacimientoInput) return;
@@ -183,7 +199,8 @@ function bloquearEntradaNacimiento() {
     });
 }
 
-// Ejecutar cuando el DOM esté cargado
+// Ejecutar la función bloquearEntradaNacimiento cuando el DOM esté completamente cargado.
+// Execute the bloquearEntradaNacimiento function when the DOM is fully loaded.
 document.addEventListener("DOMContentLoaded", function() {
     bloquearEntradaNacimiento();
 });

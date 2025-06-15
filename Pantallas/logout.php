@@ -1,3 +1,7 @@
+/**
+ * Este código finaliza la sesión del usuario y redirige a la página de inicio.
+ * This code terminates the user's session and redirects to the homepage.
+ */
 <?php
 session_start();
 session_unset();

@@ -1,3 +1,5 @@
+// Permite solo letras (incluyendo acentos) y espacios al presionar teclas.
+// Allows only letters (including accents) and spaces when typing.
 function soloLetrasConAcentos(event) {
     const tecla = event.key;
     const regex = /^[a-zA-ZáéíóúàèìòùâêîôûãñõüïçÁÉÍÓÚÀÈÌÒÙÂÊÎÔÛÃÑÕÜÏÇ\s]$/;
@@ -7,6 +9,8 @@ function soloLetrasConAcentos(event) {
     }
 }
 
+// Permite solo números y guiones (-) al presionar teclas.
+// Allows only numbers and hyphens (-) when typing.
 function soloNumerosYGuion(event) {
     const tecla = event.key;
     const regex = /^[0-9-]$/;
@@ -16,23 +20,24 @@ function soloNumerosYGuion(event) {
     }
 }
 
-
+// Valida el formato de un número de teléfono (XXXX-XXXX).
+// Validates the format of a phone number (XXXX-XXXX).
 function validarTelefono(input) {
-    // Expresión regular para formato 4 dígitos - 4 dígitos
     const regex = /^\d{4}-\d{4}$/;
 
     if (regex.test(input.value)) {
-        input.setCustomValidity(''); // válido
+        input.setCustomValidity('');
     } else {
         input.setCustomValidity('El teléfono debe tener el formato XXXX-XXXX');
     }
 }
 
+// Valida la entrada de caracteres permitidos para un código PEN.
+// Validates allowed characters for a PEN code input.
 function validarPEN(event, inputElement) {
     const tecla = event.key.toUpperCase();
     const allowedNumbers = /^[0-9]$/;
 
-    // Convertir y mantener en mayúsculas
     inputElement.value = inputElement.value.toUpperCase();
     const valor = inputElement.value;
 
@@ -85,6 +90,8 @@ function validarPEN(event, inputElement) {
     }
 }
 
+// Valida las reglas finales para un código PEN.
+// Validates final rules for a PEN code.
 function validarPENFinal(inputElement) {
     const valor = inputElement.value.toUpperCase();
     const posP = valor.indexOf('P');
@@ -115,23 +122,22 @@ function validarPENFinal(inputElement) {
     return true;
 }
 
+// Valida un código PEN completo y pegado sin restricciones de entrada.
+// Validates a complete and concatenated PEN code without input restrictions.
 function validarPENPegado(inputElement) {
     const valor = inputElement.value.toUpperCase();
 
-    // Validar solo caracteres permitidos: números, P, E, N, y hasta 3 guiones
     if (!/^[0-9PEN-]*$/.test(valor)) {
         alert("Solo se permiten números, letras P, E, N y guiones (-).");
         return false;
     }
 
-    // Validar cantidad de guiones
     const countGuion = (valor.match(/-/g) || []).length;
     if (countGuion > 2) {
         alert("No se permiten más de dos guiones (-).");
         return false;
     }
 
-    // Validar que no existan combinaciones prohibidas
     if (/EN|EP|NP|NE|PN/.test(valor)) {
         alert("No se permiten combinaciones EN, EP, NP, NE ni PN.");
         return false;
@@ -154,13 +160,11 @@ function validarPENPegado(inputElement) {
         return false;
     }
 
-    // Validar E al inicio y que no haya más después
     if (valor.startsWith('E') && countE > 1) {
         alert("Si hay una 'E' al inicio, no se permite otra 'E' después.");
         return false;
     }
 
-    // Validar que P tenga al menos una E después
     const posP = valor.indexOf('P');
     if (posP !== -1) {
         const eDespuesDeP = valor.slice(posP + 1).includes('E');
@@ -173,11 +177,13 @@ function validarPENPegado(inputElement) {
     return true;
 }
 
+// Valida si un correo electrónico tiene un formato válido.
+// Validates if an email has a valid format.
 function validarEmail(inputElement) {
     const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const valor = inputElement.value.trim();
 
-    if (valor === "") return; // No validar si está vacío (el atributo required lo manejará)
+    if (valor === "") return;
 
     if (!emailRegex.test(valor)) {
         alert("Por favor, ingrese un correo electrónico válido.");
@@ -186,6 +192,8 @@ function validarEmail(inputElement) {
     }
 } 
 
+// Convierte la primera letra de un texto a mayúscula.
+// Converts the first letter of a text to uppercase.
 function primeraLetraMayuscula(inputElement) {
     const valor = inputElement.value;
     if (valor.length === 0) return;

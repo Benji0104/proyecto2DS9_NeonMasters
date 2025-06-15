@@ -1,4 +1,8 @@
- document.addEventListener('DOMContentLoaded', function () {
+/**
+ * Obtiene el elemento HTML con el ID 'visor-iframe-container'.
+ * Retrieves the HTML element with the ID 'visor-iframe-container'.
+ */
+document.addEventListener('DOMContentLoaded', function () {
     const visorContainer = document.getElementById('visor-iframe-container');
     const iframe = document.getElementById('visor-iframe');
     const btnCerrar = document.getElementById('cerrar-visor');

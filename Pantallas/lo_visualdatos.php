@@ -1,3 +1,7 @@
+/**
+ * Este código consulta una base de datos para obtener información personal según un tipo y valor proporcionados.
+ * This code queries a database to retrieve personal information based on a provided type and value.
+ */
 <?php
 require __DIR__ . '/../Assets/db/config.php';
 

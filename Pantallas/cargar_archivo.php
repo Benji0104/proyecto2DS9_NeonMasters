@@ -1,3 +1,7 @@
+/**
+ * Este código recupera un archivo binario desde una base de datos y lo envía al navegador con su tipo MIME correspondiente.
+ * This code retrieves a binary file from a database and sends it to the browser with its corresponding MIME type.
+ */
 <?php
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);

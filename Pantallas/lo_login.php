@@ -1,3 +1,7 @@
+/**
+ * Este código maneja el inicio de sesión verificando el usuario y contraseña contra una base de datos.
+ * This code handles login by verifying the username and password against a database.
+ */
 <?php
 session_start();
 require __DIR__ . '/../Assets/db/config.php';
@@ -29,9 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['login_error'] = "Error en la base de datos.";
     }
 
-    header("Location: login.php");
+    header("Location: index.php");
     exit;
 } else {
-    header("Location: login.php");
+    header("Location: index.php");
     exit;
 }
